@@ -1,0 +1,1857 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meta Monitor Session Visualization Mockups</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-2: #fbfcff;
+      --card: #ffffff;
+      --ink: #172033;
+      --muted: #657084;
+      --line: #d9dfeb;
+      --soft: #edf1f7;
+      --blue: #2563eb;
+      --teal: #0f8b8d;
+      --green: #16803c;
+      --amber: #b06a00;
+      --rose: #c2415b;
+      --violet: #6b4fd6;
+      --shadow: 0 10px 28px rgba(23, 32, 51, 0.08);
+      --radius: 8px;
+      --control-bg: #ffffff;
+      --control-ink: #172033;
+      --card-shadow-fill: rgba(23,32,51,0.08);
+      --svg-card-bg: #ffffff;
+      --svg-card-ink: #172033;
+      --svg-card-muted: #657084;
+      --svg-line: #d9dfeb;
+      --lane-fill: #edf1f7;
+      --link-line: #8793a7;
+      --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-display: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-card: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --panel-border-width: 1px;
+      --theme-note: "기본 운영형 시각화";
+      font-family: var(--font-body);
+    }
+
+    body[data-design="openai"][data-mode="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-2: #f7f7f8;
+      --card: #ffffff;
+      --ink: #212121;
+      --muted: #6e6e80;
+      --line: #e5e5e5;
+      --soft: #f7f7f8;
+      --blue: #10a37f;
+      --teal: #10a37f;
+      --green: #0e9270;
+      --amber: #8a6a1f;
+      --rose: #9f3d51;
+      --violet: #343541;
+      --shadow: 0 0 0 1px rgba(0,0,0,0.08);
+      --radius: 8px;
+      --control-bg: #f7f7f8;
+      --control-ink: #212121;
+      --card-shadow-fill: rgba(0,0,0,0.06);
+      --svg-card-bg: #ffffff;
+      --svg-card-ink: #212121;
+      --svg-card-muted: #6e6e80;
+      --svg-line: #e5e5e5;
+      --lane-fill: #f7f7f8;
+      --link-line: #8e8ea0;
+      --font-display: Sohne, ui-sans-serif, system-ui, sans-serif;
+      --font-body: Sohne, ui-sans-serif, system-ui, sans-serif;
+      --font-card: Sohne, ui-sans-serif, system-ui, sans-serif;
+      --theme-note: "흰 여백, 단색 그린, 낮은 장식성";
+    }
+
+    body[data-design="openai"][data-mode="dark"] {
+      color-scheme: dark;
+      --bg: #212121;
+      --surface: #2a2a2a;
+      --surface-2: #343541;
+      --card: #343541;
+      --ink: #ececf1;
+      --muted: #8e8ea0;
+      --line: #444654;
+      --soft: #343541;
+      --blue: #10a37f;
+      --teal: #10a37f;
+      --green: #10a37f;
+      --amber: #d4a64a;
+      --rose: #e06b7d;
+      --violet: #ececf1;
+      --shadow: 0 0 0 1px rgba(255,255,255,0.08);
+      --radius: 8px;
+      --control-bg: #343541;
+      --control-ink: #ececf1;
+      --card-shadow-fill: rgba(0,0,0,0.22);
+      --svg-card-bg: #2a2a2a;
+      --svg-card-ink: #ececf1;
+      --svg-card-muted: #8e8ea0;
+      --svg-line: #444654;
+      --lane-fill: #343541;
+      --link-line: #8e8ea0;
+      --font-display: Sohne, ui-sans-serif, system-ui, sans-serif;
+      --font-body: Sohne, ui-sans-serif, system-ui, sans-serif;
+      --font-card: Sohne, ui-sans-serif, system-ui, sans-serif;
+      --theme-note: "다크 채팅 표면, 단색 그린, 높은 대비";
+    }
+
+    body[data-design="claude"][data-mode="light"] {
+      color-scheme: light;
+      --bg: #faf9f5;
+      --surface: #fffdf8;
+      --surface-2: #f5f0e8;
+      --card: #efe9de;
+      --ink: #141413;
+      --muted: #6c6a64;
+      --line: #e6dfd8;
+      --soft: #f5f0e8;
+      --blue: #5db8a6;
+      --teal: #5db8a6;
+      --green: #5db872;
+      --amber: #d4a017;
+      --rose: #cc785c;
+      --violet: #252320;
+      --shadow: 0 10px 26px rgba(61, 61, 58, 0.08);
+      --radius: 12px;
+      --control-bg: #efe9de;
+      --control-ink: #141413;
+      --card-shadow-fill: rgba(61,61,58,0.08);
+      --svg-card-bg: #fffdf8;
+      --svg-card-ink: #141413;
+      --svg-card-muted: #6c6a64;
+      --svg-line: #e6dfd8;
+      --lane-fill: #f5f0e8;
+      --link-line: #a09d96;
+      --font-display: Georgia, "Times New Roman", serif;
+      --font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+      --font-card: Inter, ui-sans-serif, system-ui, sans-serif;
+      --theme-note: "따뜻한 캔버스, 에디토리얼 톤, 코랄 액센트";
+    }
+
+    body[data-design="claude"][data-mode="dark"] {
+      color-scheme: dark;
+      --bg: #181715;
+      --surface: #252320;
+      --surface-2: #1f1e1b;
+      --card: #2f2c27;
+      --ink: #faf9f5;
+      --muted: #a09d96;
+      --line: #4a443d;
+      --soft: #1f1e1b;
+      --blue: #5db8a6;
+      --teal: #5db8a6;
+      --green: #5db872;
+      --amber: #e8a55a;
+      --rose: #cc785c;
+      --violet: #efe9de;
+      --shadow: 0 10px 28px rgba(0,0,0,0.32);
+      --radius: 12px;
+      --control-bg: #252320;
+      --control-ink: #faf9f5;
+      --card-shadow-fill: rgba(0,0,0,0.28);
+      --svg-card-bg: #252320;
+      --svg-card-ink: #faf9f5;
+      --svg-card-muted: #a09d96;
+      --svg-line: #4a443d;
+      --lane-fill: #1f1e1b;
+      --link-line: #a09d96;
+      --font-display: Georgia, "Times New Roman", serif;
+      --font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+      --font-card: Inter, ui-sans-serif, system-ui, sans-serif;
+      --theme-note: "따뜻한 다크 캔버스, 코랄 액센트, 읽기 중심";
+    }
+
+    body[data-design="hashicorp"][data-mode="light"] {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-2: #eef1f5;
+      --card: #ffffff;
+      --ink: #000000;
+      --muted: #656a76;
+      --line: #c9ced8;
+      --soft: #eef1f5;
+      --blue: #2b89ff;
+      --teal: #14c6cb;
+      --green: #00a876;
+      --amber: #bb5a00;
+      --rose: #e62b1e;
+      --violet: #7b42bc;
+      --shadow: 0 0 0 1px rgba(0,0,0,0.1);
+      --radius: 8px;
+      --control-bg: #ffffff;
+      --control-ink: #000000;
+      --card-shadow-fill: rgba(0,0,0,0.08);
+      --svg-card-bg: #ffffff;
+      --svg-card-ink: #000000;
+      --svg-card-muted: #656a76;
+      --svg-line: #c9ced8;
+      --lane-fill: #eef1f5;
+      --link-line: #656a76;
+      --font-display: ui-sans-serif, system-ui, sans-serif;
+      --font-body: ui-sans-serif, system-ui, sans-serif;
+      --font-card: ui-sans-serif, system-ui, sans-serif;
+      --theme-note: "밝은 인프라 캔버스, 제품별 액센트 유지";
+    }
+
+    body[data-design="hashicorp"][data-mode="dark"] {
+      color-scheme: dark;
+      --bg: #000000;
+      --surface: #15181e;
+      --surface-2: #1f232b;
+      --card: #1f232b;
+      --ink: #ffffff;
+      --muted: #b2b6bd;
+      --line: #3b3d45;
+      --soft: #252830;
+      --blue: #2b89ff;
+      --teal: #14c6cb;
+      --green: #00ca8e;
+      --amber: #ffcf25;
+      --rose: #f24c53;
+      --violet: #7b42bc;
+      --shadow: 0 0 0 1px rgba(255,255,255,0.08);
+      --radius: 8px;
+      --control-bg: #1f232b;
+      --control-ink: #ffffff;
+      --card-shadow-fill: rgba(0,0,0,0.32);
+      --svg-card-bg: #15181e;
+      --svg-card-ink: #ffffff;
+      --svg-card-muted: #b2b6bd;
+      --svg-line: #3b3d45;
+      --lane-fill: #252830;
+      --link-line: #656a76;
+      --font-display: ui-sans-serif, system-ui, sans-serif;
+      --font-body: ui-sans-serif, system-ui, sans-serif;
+      --font-card: ui-sans-serif, system-ui, sans-serif;
+      --theme-note: "검은 인프라 캔버스, 제품별 강한 액센트";
+    }
+
+    body[data-design="dell"][data-mode="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-2: #fcc20f;
+      --card: #c0d4a7;
+      --ink: #000000;
+      --muted: #000000;
+      --line: #000000;
+      --soft: #d77a7a;
+      --blue: #0000ee;
+      --teal: #9ab6c8;
+      --green: #c0d4a7;
+      --amber: #fcc20f;
+      --rose: #e91d2a;
+      --violet: #6a26a4;
+      --shadow: none;
+      --radius: 0px;
+      --control-bg: #fcc20f;
+      --control-ink: #000000;
+      --card-shadow-fill: rgba(0,0,0,0);
+      --svg-card-bg: #ffffff;
+      --svg-card-ink: #000000;
+      --svg-card-muted: #000000;
+      --svg-line: #000000;
+      --lane-fill: #c0d4a7;
+      --link-line: #000000;
+      --font-display: "Arial Black", Arial, Helvetica, sans-serif;
+      --font-body: "Times New Roman", Times, serif;
+      --font-card: Helvetica, Arial, sans-serif;
+      --panel-border-width: 2px;
+      --theme-note: "흰 카탈로그 캔버스, 검은 테두리, 노란 셀렉터";
+    }
+
+    body[data-design="dell"][data-mode="dark"] {
+      color-scheme: light;
+      --bg: #000000;
+      --surface: #ffffff;
+      --surface-2: #c0d4a7;
+      --card: #b3bd95;
+      --ink: #000000;
+      --muted: #000000;
+      --line: #000000;
+      --soft: #d77a7a;
+      --blue: #0000ee;
+      --teal: #9ab6c8;
+      --green: #c0d4a7;
+      --amber: #fcc20f;
+      --rose: #e91d2a;
+      --violet: #6a26a4;
+      --shadow: none;
+      --radius: 0px;
+      --control-bg: #fcc20f;
+      --control-ink: #000000;
+      --card-shadow-fill: rgba(0,0,0,0);
+      --svg-card-bg: #ffffff;
+      --svg-card-ink: #000000;
+      --svg-card-muted: #000000;
+      --svg-line: #000000;
+      --lane-fill: #c0d4a7;
+      --link-line: #000000;
+      --font-display: "Arial Black", Arial, Helvetica, sans-serif;
+      --font-body: "Times New Roman", Times, serif;
+      --font-card: Helvetica, Arial, sans-serif;
+      --panel-border-width: 2px;
+      --theme-note: "검은 프레임, 리본 카드, 1996 카탈로그 웹";
+    }
+
+    body[data-design="spotify"][data-mode="light"] {
+      color-scheme: light;
+      --bg: #f4f4f4;
+      --surface: #ffffff;
+      --surface-2: #eeeeee;
+      --card: #ffffff;
+      --ink: #181818;
+      --muted: #5f5f5f;
+      --line: #d8d8d8;
+      --soft: #eeeeee;
+      --blue: #316fbd;
+      --teal: #1db954;
+      --green: #1db954;
+      --amber: #b96a00;
+      --rose: #c5485d;
+      --violet: #181818;
+      --shadow: 0 8px 20px rgba(0,0,0,0.14);
+      --radius: 8px;
+      --control-bg: #eeeeee;
+      --control-ink: #181818;
+      --card-shadow-fill: rgba(0,0,0,0.12);
+      --svg-card-bg: #ffffff;
+      --svg-card-ink: #181818;
+      --svg-card-muted: #5f5f5f;
+      --svg-line: #d8d8d8;
+      --lane-fill: #eeeeee;
+      --link-line: #7c7c7c;
+      --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-card: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --theme-note: "밝은 플레이어 표면, pill geometry, 그린 액션";
+    }
+
+    body[data-design="spotify"][data-mode="dark"] {
+      color-scheme: dark;
+      --bg: #121212;
+      --surface: #181818;
+      --surface-2: #1f1f1f;
+      --card: #252525;
+      --ink: #ffffff;
+      --muted: #b3b3b3;
+      --line: #4d4d4d;
+      --soft: #1f1f1f;
+      --blue: #539df5;
+      --teal: #1ed760;
+      --green: #1ed760;
+      --amber: #ffa42b;
+      --rose: #f3727f;
+      --violet: #cbcbcb;
+      --shadow: 0 8px 24px rgba(0,0,0,0.5);
+      --radius: 8px;
+      --control-bg: #1f1f1f;
+      --control-ink: #ffffff;
+      --card-shadow-fill: rgba(0,0,0,0.38);
+      --svg-card-bg: #181818;
+      --svg-card-ink: #ffffff;
+      --svg-card-muted: #b3b3b3;
+      --svg-line: #4d4d4d;
+      --lane-fill: #1f1f1f;
+      --link-line: #7c7c7c;
+      --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-card: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --theme-note: "몰입형 다크 플레이어, pill geometry, 그린 액션";
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    .shell {
+      width: min(1480px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      line-height: 1.16;
+      font-weight: 750;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      line-height: 1.3;
+      font-weight: 740;
+    }
+
+    h3 {
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 720;
+    }
+
+    .subhead {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      max-width: 760px;
+    }
+
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .metric,
+    .panel,
+    .mini-card {
+      background: var(--surface);
+      border: var(--panel-border-width) solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .metric {
+      min-height: 74px;
+      padding: 12px 14px;
+      display: grid;
+      align-content: center;
+      gap: 5px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .metric strong {
+      font-size: 15px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .panel {
+      min-width: 0;
+      min-height: 420px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel.wide {
+      grid-column: 1 / -1;
+    }
+
+    .panel-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 12px;
+      padding: 16px 18px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-title {
+      display: grid;
+      gap: 4px;
+    }
+
+    .panel-title p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: var(--surface-2);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .tag.blue { color: var(--blue); border-color: rgba(37, 99, 235, 0.25); background: rgba(37, 99, 235, 0.07); }
+    .tag.teal { color: var(--teal); border-color: rgba(15, 139, 141, 0.25); background: rgba(15, 139, 141, 0.07); }
+    .tag.green { color: var(--green); border-color: rgba(22, 128, 60, 0.24); background: rgba(22, 128, 60, 0.07); }
+    .tag.amber { color: var(--amber); border-color: rgba(176, 106, 0, 0.25); background: rgba(176, 106, 0, 0.07); }
+    .tag.rose { color: var(--rose); border-color: rgba(194, 65, 91, 0.25); background: rgba(194, 65, 91, 0.07); }
+    .tag.violet { color: var(--violet); border-color: rgba(107, 79, 214, 0.25); background: rgba(107, 79, 214, 0.07); }
+
+    .panel-body {
+      padding: 14px 18px 18px;
+    }
+
+    .viz {
+      width: 100%;
+      min-height: 310px;
+      display: block;
+      background: var(--surface);
+    }
+
+    .wide .viz {
+      min-height: 340px;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .legend-row,
+    .list-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      flex: 0 0 auto;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .mini-card {
+      padding: 10px 11px;
+      display: grid;
+      gap: 5px;
+      min-width: 170px;
+      flex: 1 1 180px;
+    }
+
+    .mini-card span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .svg-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--svg-card-bg);
+      padding: 9px;
+      overflow: hidden;
+      font-family: var(--font-card);
+    }
+
+    .svg-card .graph-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      max-width: 100%;
+      margin-bottom: 5px;
+      color: var(--node-color, var(--blue));
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 800;
+      text-transform: uppercase;
+      overflow-wrap: anywhere;
+    }
+
+    .svg-card strong {
+      display: block;
+      color: var(--svg-card-ink);
+      font-size: 13px;
+      line-height: 1.25;
+      margin-bottom: 5px;
+      overflow-wrap: anywhere;
+    }
+
+    .svg-card span {
+      display: block;
+      color: var(--svg-card-muted);
+      font-size: 11px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .svg-card--openai {
+      padding: 10px 11px;
+      background: var(--svg-card-bg);
+    }
+
+    .svg-card--openai .graph-kicker {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      color: transparent;
+      background: var(--node-color, var(--blue));
+    }
+
+    .svg-card--claude {
+      padding: 9px 10px;
+      background: var(--surface);
+      border-radius: 12px;
+    }
+
+    .svg-card--claude .graph-kicker {
+      position: absolute;
+      top: 6px;
+      right: 7px;
+      max-width: 50px;
+      color: var(--rose);
+      font-family: var(--font-display);
+      font-size: 9px;
+      text-transform: none;
+    }
+
+    .svg-card--hashicorp {
+      padding: 8px 9px;
+      background: var(--svg-card-bg);
+      border-radius: 6px;
+    }
+
+    .svg-card--hashicorp .graph-kicker {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      max-width: 56px;
+      padding: 3px 6px;
+      background: var(--node-color, var(--blue));
+      color: #000000;
+      border-radius: 3px;
+      font-size: 8px;
+      letter-spacing: 0;
+    }
+
+    .svg-card--dell {
+      padding: 7px 8px;
+      color: #000000;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      font-family: Helvetica, Arial, sans-serif;
+    }
+
+    .svg-card--dell .graph-kicker {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding: 2px 4px;
+      border: 1px solid #000000;
+      background: #fcc20f;
+      color: #000000;
+      font-family: "Arial Black", Arial, Helvetica, sans-serif;
+      font-size: 8px;
+    }
+
+    .svg-card--dell strong,
+    .svg-card--dell span {
+      color: #000000;
+    }
+
+    .svg-card--spotify {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      column-gap: 9px;
+      align-items: center;
+      padding: 9px 12px 9px 9px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--svg-card-bg);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+
+    .svg-card--spotify .graph-kicker {
+      grid-row: 1 / span 2;
+      width: 28px;
+      height: 28px;
+      justify-content: center;
+      margin: 0;
+      border-radius: 50%;
+      background: var(--node-color, var(--green));
+      color: #000000;
+      font-size: 10px;
+    }
+
+    .svg-card--spotify strong,
+    .svg-card--spotify span {
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .state-risk-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(280px, 0.96fr);
+      gap: 14px;
+    }
+
+    .state-flow {
+      display: grid;
+      gap: 10px;
+    }
+
+    .state-step {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      min-height: 62px;
+    }
+
+    .step-index {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .state-copy {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+
+    .state-copy strong {
+      font-size: 13px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .state-copy span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .risk-box {
+      position: relative;
+      min-height: 332px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(to right, transparent calc(33.333% - 1px), var(--line) calc(33.333% - 1px), var(--line) calc(33.333% + 1px), transparent calc(33.333% + 1px)),
+        linear-gradient(to right, transparent calc(66.666% - 1px), var(--line) calc(66.666% - 1px), var(--line) calc(66.666% + 1px), transparent calc(66.666% + 1px)),
+        linear-gradient(to bottom, transparent calc(33.333% - 1px), var(--line) calc(33.333% - 1px), var(--line) calc(33.333% + 1px), transparent calc(33.333% + 1px)),
+        linear-gradient(to bottom, transparent calc(66.666% - 1px), var(--line) calc(66.666% - 1px), var(--line) calc(66.666% + 1px), transparent calc(66.666% + 1px)),
+        var(--surface);
+      overflow: hidden;
+    }
+
+    .axis-label {
+      position: absolute;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 680;
+      background: var(--surface-2);
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+
+    .risk-point {
+      position: absolute;
+      width: 126px;
+      min-height: 44px;
+      transform: translate(-50%, -50%);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      padding: 7px 8px;
+      background: var(--card);
+      box-shadow: 0 6px 18px rgba(23, 32, 51, 0.12);
+      font-size: 11px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .risk-point strong {
+      display: block;
+      font-size: 11px;
+      line-height: 1.25;
+      margin-bottom: 3px;
+    }
+
+    .risk-point span {
+      color: var(--muted);
+    }
+
+    .risk-point.high { border-left: 5px solid var(--rose); }
+    .risk-point.medium { border-left: 5px solid var(--amber); }
+    .risk-point.low { border-left: 5px solid var(--green); }
+
+    .state-flow--openai .state-step {
+      box-shadow: none;
+    }
+
+    .state-flow--claude .state-step {
+      align-items: start;
+      background: var(--surface);
+      border-color: var(--line);
+      border-radius: 12px;
+    }
+
+    .state-flow--claude .step-index {
+      border-radius: 12px 12px 2px 12px;
+      font-family: var(--font-display);
+    }
+
+    .state-flow--hashicorp .state-step {
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      background:
+        linear-gradient(90deg, var(--surface-2) 0 42px, var(--surface) 42px);
+      border-radius: 6px;
+    }
+
+    .state-flow--hashicorp .step-index {
+      width: 24px;
+      height: 24px;
+      border-radius: 3px;
+      justify-self: center;
+      color: #000000;
+    }
+
+    .state-flow--dell .state-step {
+      grid-template-columns: 74px minmax(0, 1fr) auto;
+      min-height: 68px;
+      background: #ffffff;
+      border: 2px solid #000000;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .state-flow--dell .step-index {
+      width: 58px;
+      height: 28px;
+      border: 2px solid #000000;
+      border-radius: 0;
+      background: #fcc20f !important;
+      color: #000000;
+      font-family: "Arial Black", Arial, Helvetica, sans-serif;
+    }
+
+    .state-flow--spotify .state-step {
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      border-radius: 999px;
+      border-color: transparent;
+      background: var(--surface-2);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+
+    .state-flow--spotify .step-index {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      color: #000000;
+    }
+
+    .risk-box--claude {
+      background:
+        radial-gradient(circle at 22% 20%, rgba(204, 120, 92, 0.14), transparent 26%),
+        linear-gradient(to right, transparent calc(50% - 1px), var(--line) calc(50% - 1px), var(--line) calc(50% + 1px), transparent calc(50% + 1px)),
+        linear-gradient(to bottom, transparent calc(50% - 1px), var(--line) calc(50% - 1px), var(--line) calc(50% + 1px), transparent calc(50% + 1px)),
+        var(--surface);
+    }
+
+    .risk-box--hashicorp {
+      border-radius: 6px;
+      background:
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px),
+        var(--surface);
+      background-size: 33.333% 100%, 100% 33.333%, auto;
+    }
+
+    .risk-box--dell {
+      border: 2px solid #000000;
+      border-radius: 0;
+      background:
+        linear-gradient(to right, transparent calc(33.333% - 1px), #000000 calc(33.333% - 1px), #000000 calc(33.333% + 1px), transparent calc(33.333% + 1px)),
+        linear-gradient(to right, transparent calc(66.666% - 1px), #000000 calc(66.666% - 1px), #000000 calc(66.666% + 1px), transparent calc(66.666% + 1px)),
+        linear-gradient(to bottom, transparent calc(33.333% - 1px), #000000 calc(33.333% - 1px), #000000 calc(33.333% + 1px), transparent calc(33.333% + 1px)),
+        linear-gradient(to bottom, transparent calc(66.666% - 1px), #000000 calc(66.666% - 1px), #000000 calc(66.666% + 1px), transparent calc(66.666% + 1px)),
+        #ffffff;
+    }
+
+    .risk-box--spotify {
+      border-radius: 8px;
+      background:
+        repeating-linear-gradient(to top, transparent 0 30px, rgba(29, 215, 96, 0.16) 30px 32px),
+        var(--surface);
+    }
+
+    .risk-point--dell {
+      border: 2px solid #000000;
+      border-radius: 0;
+      box-shadow: none;
+      color: #000000;
+    }
+
+    .risk-point--spotify {
+      width: 116px;
+      min-height: 40px;
+      border-radius: 999px;
+      border-left-width: 1px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+      text-align: center;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin-top: 14px;
+    }
+
+    .preset-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(140px, 1fr));
+      gap: 6px;
+      justify-self: end;
+      min-width: min(420px, 100%);
+    }
+
+    .preset-controls .design-note {
+      grid-column: 1 / -1;
+    }
+
+    .design-control {
+      display: grid;
+      gap: 6px;
+    }
+
+    .design-control label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .design-control select {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--control-bg);
+      color: var(--control-ink);
+      font: 700 13px/1 var(--font-body);
+      padding: 0 12px;
+    }
+
+    .design-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    body[data-design="dell"] header {
+      align-items: start;
+    }
+
+    body[data-design="dell"][data-mode="dark"] h1,
+    body[data-design="dell"][data-mode="dark"] .subhead,
+    body[data-design="dell"][data-mode="dark"] .design-control label,
+    body[data-design="dell"][data-mode="dark"] .design-note,
+    body[data-design="dell"][data-mode="dark"] .footer-note {
+      color: #ffffff;
+    }
+
+    body[data-design="dell"] h1 {
+      text-transform: uppercase;
+      line-height: 1.28;
+    }
+
+    body[data-design="dell"] .metric,
+    body[data-design="dell"] .panel,
+    body[data-design="dell"] .mini-card,
+    body[data-design="dell"] .state-step,
+    body[data-design="dell"] .risk-box {
+      border-color: #000000;
+      box-shadow: none;
+    }
+
+    body[data-design="dell"] .tag {
+      border-color: #000000;
+      background: #ffffff;
+      color: #0000ee;
+    }
+
+    body[data-design="dell"] .panel-header {
+      background: #ffffff;
+      border-bottom: 2px solid #000000;
+    }
+
+    @media (max-width: 1060px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .status-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .state-risk-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100vw - 20px, 1480px);
+        padding-top: 16px;
+      }
+
+      header {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .status-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-header {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-body {
+        padding: 12px;
+      }
+
+      .state-step {
+        grid-template-columns: 32px minmax(0, 1fr);
+      }
+
+      .state-step .tag {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+  </style>
+</head>
+<body data-design="openai" data-mode="light">
+  <main class="shell">
+    <header>
+      <div>
+        <h1>세션 시각화 목업</h1>
+        <p class="subhead">같은 mock session snapshot을 Git, workflow, decision, evidence, risk 관점으로 투영한 데모입니다.</p>
+      </div>
+      <div class="preset-controls">
+        <div class="design-control">
+          <label for="designPreset">Design preset</label>
+          <select id="designPreset" aria-describedby="designNote">
+            <option value="openai">OpenAI</option>
+            <option value="claude">Claude</option>
+            <option value="hashicorp">HashiCorp</option>
+            <option value="dell">Dell 1996</option>
+            <option value="spotify">Spotify</option>
+          </select>
+        </div>
+        <div class="design-control">
+          <label for="modePreset">Mode</label>
+          <select id="modePreset" aria-describedby="designNote">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+        <span class="design-note" id="designNote"></span>
+      </div>
+    </header>
+
+    <section class="status-strip" aria-label="session summary">
+      <div class="metric">
+        <span>현재 목표</span>
+        <strong id="goalMetric"></strong>
+      </div>
+      <div class="metric">
+        <span>작업 상태</span>
+        <strong id="stateMetric"></strong>
+      </div>
+      <div class="metric">
+        <span>근거 품질</span>
+        <strong id="evidenceMetric"></strong>
+      </div>
+      <div class="metric">
+        <span>다음 행동</span>
+        <strong id="actionMetric"></strong>
+      </div>
+    </section>
+
+    <section class="dashboard" aria-label="visualization mockups">
+      <article class="panel wide">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>1. Git Branch Graph</h2>
+            <p>artifact history · 분기, 실험, 병합 지점</p>
+          </div>
+          <span class="tag blue">code path</span>
+        </div>
+        <div class="panel-body">
+          <div class="viz" id="gitGraph"></div>
+          <div class="legend-row" id="gitLegend"></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>2. Work Episode Graph</h2>
+            <p>intent history · 세션의 논리적 작업 흐름</p>
+          </div>
+          <span class="tag teal">workflow</span>
+        </div>
+        <div class="panel-body">
+          <div class="viz" id="episodeGraph"></div>
+          <div class="list-grid" id="episodeStats"></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>3. Decision + Alternative Map</h2>
+            <p>choice history · 선택한 길과 남은 선택지</p>
+          </div>
+          <span class="tag green">alternatives</span>
+        </div>
+        <div class="panel-body">
+          <div class="viz" id="decisionMap"></div>
+          <div class="list-grid" id="decisionStats"></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>4. Evidence Graph</h2>
+            <p>trust history · 결론과 근거의 연결</p>
+          </div>
+          <span class="tag amber">evidence</span>
+        </div>
+        <div class="panel-body">
+          <div class="viz" id="evidenceGraph"></div>
+          <div class="list-grid" id="evidenceStats"></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>5. State Flow + Risk View</h2>
+            <p>completion history · 현재 상태와 위험 위치</p>
+          </div>
+          <span class="tag rose">risk</span>
+        </div>
+        <div class="panel-body state-risk-grid">
+          <div class="state-flow" id="stateFlow"></div>
+          <div class="risk-box" id="riskBox" aria-label="risk matrix">
+            <span class="axis-label" style="left: 8px; top: 8px;">영향 낮음</span>
+            <span class="axis-label" style="right: 8px; top: 8px;">영향 높음</span>
+            <span class="axis-label" style="left: 8px; bottom: 8px;">확실성 낮음</span>
+            <span class="axis-label" style="right: 8px; bottom: 8px;">확실성 높음</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="footer-note">Mock data only. 실제 구현에서는 `session-snapshot.latest.json`에서 각 view model을 파생하고, 보드는 해석 대신 렌더링만 담당합니다.</p>
+  </main>
+
+  <script>
+    const mockSnapshot = {
+      sessionId: "mock-20260602-meta-monitor",
+      goal: "세션 이해 모델 중심의 Meta Monitor 구조 탐색",
+      state: "snapshot contract 결정 전",
+      evidenceQuality: "중간 이상 · 9-lens review 기반",
+      nextAction: "session-snapshot schema 초안 작성",
+      branches: [
+        { id: "main", label: "main", y: 88, colorRole: "blue" },
+        { id: "snapshot", label: "feat/session-snapshot", y: 168, colorRole: "teal" },
+        { id: "alt", label: "exp/alternative-map", y: 248, colorRole: "amber" }
+      ],
+      commits: [
+        { id: "c1", branch: "main", x: 70, label: "init", note: "runtime" },
+        { id: "c2", branch: "main", x: 190, label: "event log", note: "visible source" },
+        { id: "c3", branch: "snapshot", x: 320, label: "snapshot v0", note: "new truth" },
+        { id: "c4", branch: "snapshot", x: 470, label: "view model", note: "projection" },
+        { id: "c5", branch: "alt", x: 600, label: "alt map", note: "spike" },
+        { id: "c6", branch: "snapshot", x: 720, label: "validation", note: "robustness" },
+        { id: "c7", branch: "main", x: 830, label: "merge plan", note: "decision" }
+      ],
+      commitEdges: [
+        ["c1", "c2"], ["c2", "c3"], ["c3", "c4"], ["c4", "c6"], ["c4", "c5"], ["c5", "c7"], ["c6", "c7"]
+      ],
+      episodes: [
+        { id: "e1", lane: "Sensemaking", x: 72, y: 82, title: "목적 재정의", meta: "시각화가 핵심 가치", colorRole: "violet" },
+        { id: "e2", lane: "Sensemaking", x: 270, y: 82, title: "9-lens 리뷰", meta: "session model 부재 발견", colorRole: "violet" },
+        { id: "e3", lane: "Contract", x: 270, y: 190, title: "Snapshot 권위", meta: "monitor input은 debug packet", colorRole: "teal" },
+        { id: "e4", lane: "Contract", x: 468, y: 190, title: "View models", meta: "timeline / decision / risk", colorRole: "teal" },
+        { id: "e5", lane: "Runtime", x: 468, y: 298, title: "Health + retry", meta: "timeout, lastError, stale", colorRole: "rose" },
+        { id: "e6", lane: "Runtime", x: 666, y: 298, title: "One command", meta: "live optional", colorRole: "green" }
+      ],
+      episodeEdges: [["e1", "e2"], ["e2", "e3"], ["e3", "e4"], ["e4", "e5"], ["e5", "e6"]],
+      decisions: [
+        { id: "d0", kind: "center", x: 404, y: 176, title: "스냅샷 우선", meta: "contract/projection first", colorRole: "teal" },
+        { id: "d1", kind: "chosen", x: 70, y: 68, title: "A 유지+보강", meta: "가장 빠른 경로", colorRole: "green" },
+        { id: "d2", kind: "chosen", x: 662, y: 68, title: "B 단일 서비스", meta: "snapshot 안정 후", colorRole: "blue" },
+        { id: "d3", kind: "fallback", x: 70, y: 288, title: "C batch-first", meta: "robust fallback", colorRole: "amber" },
+        { id: "d4", kind: "later", x: 662, y: 288, title: "D plugin/MCP", meta: "제품화 이후", colorRole: "violet" }
+      ],
+      decisionEdges: [["d0", "d1"], ["d0", "d2"], ["d0", "d3"], ["d0", "d4"]],
+      claims: [
+        { id: "cl1", x: 50, y: 58, title: "상위 목적 부족", meta: "latest advice만으로 부족", colorRole: "rose" },
+        { id: "cl2", x: 50, y: 162, title: "경계 위반", meta: "hard-coded board content", colorRole: "amber" },
+        { id: "cl3", x: 50, y: 266, title: "운영 취약점", meta: "retry/health 부족", colorRole: "blue" }
+      ],
+      evidence: [
+        { id: "ev1", x: 592, y: 44, title: "final-output.md", meta: "9-lens consensus", colorRole: "violet" },
+        { id: "ev2", x: 592, y: 122, title: "briefing-board.html", meta: "static content", colorRole: "amber" },
+        { id: "ev3", x: 592, y: 200, title: "monitor-worker.mjs", meta: "state/retry path", colorRole: "blue" },
+        { id: "ev4", x: 592, y: 278, title: "schema + prompt", meta: "contract drift", colorRole: "teal" }
+      ],
+      evidenceEdges: [
+        ["cl1", "ev1"], ["cl1", "ev4"], ["cl2", "ev2"], ["cl2", "ev1"], ["cl3", "ev3"], ["cl3", "ev1"]
+      ],
+      states: [
+        { title: "관찰", meta: "visible event ledger 수집", status: "done", colorRole: "blue" },
+        { title: "해석", meta: "session snapshot으로 구조화", status: "active", colorRole: "teal" },
+        { title: "투영", meta: "timeline, map, risk view 생성", status: "next", colorRole: "amber" },
+        { title: "검증", meta: "schema, stale, evidence quality 확인", status: "queued", colorRole: "rose" },
+        { title: "단순화", meta: "one command 또는 batch-first 결정", status: "queued", colorRole: "green" }
+      ],
+      risks: [
+        { title: "근거 부족", meta: "invalid event", impact: 72, certainty: 74, level: "high" },
+        { title: "stale advice", meta: "worker fail", impact: 82, certainty: 58, level: "high" },
+        { title: "뷰 과밀", meta: "cognitive load", impact: 52, certainty: 48, level: "medium" },
+        { title: "live 과설계", meta: "two process", impact: 42, certainty: 38, level: "medium" },
+        { title: "plugin 조기화", meta: "surface cost", impact: 62, certainty: 28, level: "low" }
+      ]
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const designNotes = {
+      openai: {
+        light: "흰 여백, 단색 그린, 낮은 장식성",
+        dark: "다크 채팅 표면, 단색 그린, 높은 대비"
+      },
+      claude: {
+        light: "따뜻한 캔버스, 에디토리얼 톤, 코랄 액센트",
+        dark: "따뜻한 다크 캔버스, 코랄 액센트, 읽기 중심"
+      },
+      hashicorp: {
+        light: "밝은 인프라 캔버스, 제품별 액센트 유지",
+        dark: "검은 인프라 캔버스, 제품별 강한 액센트"
+      },
+      dell: {
+        light: "흰 카탈로그 캔버스, 검은 테두리, 노란 셀렉터",
+        dark: "검은 프레임, 리본 카드, 1996 카탈로그 웹"
+      },
+      spotify: {
+        light: "밝은 플레이어 표면, pill geometry, 그린 액션",
+        dark: "몰입형 다크 플레이어, pill geometry, 그린 액션"
+      }
+    };
+    const roleNames = ["blue", "teal", "green", "amber", "rose", "violet"];
+    const graphProfiles = {
+      openai: {
+        key: "openai",
+        lane: "minimal",
+        edge: "curve",
+        nodeShape: "circle",
+        cardWidthBonus: 0,
+        edgeWidth: 2,
+        labelShift: 0
+      },
+      claude: {
+        key: "claude",
+        lane: "editorial",
+        edge: "soft",
+        nodeShape: "note",
+        cardWidthBonus: 0,
+        edgeWidth: 2.2,
+        labelShift: 6
+      },
+      hashicorp: {
+        key: "hashicorp",
+        lane: "topology",
+        edge: "orthogonal",
+        nodeShape: "module",
+        cardWidthBonus: 0,
+        edgeWidth: 2.6,
+        labelShift: 0
+      },
+      dell: {
+        key: "dell",
+        lane: "catalog",
+        edge: "pixel",
+        nodeShape: "square",
+        cardWidthBonus: 0,
+        edgeWidth: 3,
+        labelShift: 4,
+        ribbonFills: {
+          blue: "#9ab6c8",
+          teal: "#c0d4a7",
+          green: "#c5e15a",
+          amber: "#fcc20f",
+          rose: "#d77a7a",
+          violet: "#b8b8dd"
+        }
+      },
+      spotify: {
+        key: "spotify",
+        lane: "playlist",
+        edge: "arc",
+        nodeShape: "album",
+        cardWidthBonus: 0,
+        edgeWidth: 5,
+        labelShift: 2
+      }
+    };
+
+    function cssVar(name) {
+      return getComputedStyle(document.body).getPropertyValue(name).trim();
+    }
+
+    function graphProfile() {
+      return graphProfiles[document.body.dataset.design] || graphProfiles.openai;
+    }
+
+    function colorFor(itemOrRole) {
+      const role = typeof itemOrRole === "string" ? itemOrRole : itemOrRole.colorRole;
+      return cssVar(`--${role || "blue"}`) || cssVar("--blue");
+    }
+
+    function themeToken(name) {
+      return cssVar(name);
+    }
+
+    function svgNode(tag, attrs = {}) {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+      return node;
+    }
+
+    function addText(parent, text, x, y, attrs = {}) {
+      const node = svgNode("text", { x, y, ...attrs });
+      node.textContent = text;
+      parent.append(node);
+      return node;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      }[char]));
+    }
+
+    function profileKicker(profile, item) {
+      if (profile.key === "openai") return "";
+      if (profile.key === "claude") return item.lane || item.kind || "note";
+      if (profile.key === "hashicorp") return item.lane || item.kind || "module";
+      if (profile.key === "dell") return item.kind === "center" ? "HOT!" : "NEW!";
+      if (profile.key === "spotify") return "▶";
+      return "";
+    }
+
+    function cardFillFor(profile, item) {
+      if (profile.key === "dell") {
+        return profile.ribbonFills[item.colorRole] || "#ffffff";
+      }
+      if (profile.key === "claude" && item.kind === "center") {
+        return themeToken("--card");
+      }
+      return themeToken("--svg-card-bg");
+    }
+
+    function edgePath(fromX, fromY, toX, toY, edgeKind) {
+      const midX = (fromX + toX) / 2;
+      if (edgeKind === "orthogonal") {
+        return `M ${fromX} ${fromY} H ${midX} V ${toY} H ${toX}`;
+      }
+      if (edgeKind === "pixel") {
+        return `M ${fromX} ${fromY} L ${midX} ${fromY} L ${midX} ${toY} L ${toX} ${toY}`;
+      }
+      if (edgeKind === "straight") {
+        return `M ${fromX} ${fromY} L ${toX} ${toY}`;
+      }
+      if (edgeKind === "arc") {
+        const bend = Math.max(28, Math.abs(toY - fromY) * 0.42);
+        return `M ${fromX} ${fromY} C ${midX} ${fromY - bend}, ${midX} ${toY + bend}, ${toX} ${toY}`;
+      }
+      if (edgeKind === "soft") {
+        return `M ${fromX} ${fromY} C ${fromX + 72} ${fromY}, ${toX - 72} ${toY}, ${toX} ${toY}`;
+      }
+      return `M ${fromX} ${fromY} C ${midX} ${fromY}, ${midX} ${toY}, ${toX} ${toY}`;
+    }
+
+    function addConnector(parent, fromX, fromY, toX, toY, color, options = {}) {
+      const profile = graphProfile();
+      const edgeKind = options.edge || profile.edge;
+      const path = svgNode("path", {
+        d: edgePath(fromX, fromY, toX, toY, edgeKind),
+        fill: "none",
+        stroke: color,
+        "stroke-width": options.width || profile.edgeWidth,
+        "stroke-linecap": profile.key === "dell" ? "butt" : "round",
+        "stroke-linejoin": profile.key === "dell" ? "miter" : "round",
+        opacity: options.opacity || (profile.key === "openai" ? 0.62 : 0.78)
+      });
+      if (options.dash) {
+        path.setAttribute("stroke-dasharray", options.dash);
+      }
+      if (options.markerEnd) {
+        path.setAttribute("marker-end", `url(#${options.markerEnd})`);
+      }
+      parent.append(path);
+      return path;
+    }
+
+    function addGraphTexture(parent, width, height, label = "") {
+      const profile = graphProfile();
+      const line = themeToken("--svg-line");
+      const soft = themeToken("--lane-fill");
+      const muted = themeToken("--svg-card-muted");
+      if (profile.key === "hashicorp") {
+        for (let x = 60; x < width; x += 80) {
+          parent.append(svgNode("line", { x1: x, y1: 24, x2: x, y2: height - 24, stroke: line, "stroke-width": 0.8, opacity: 0.35 }));
+        }
+        for (let y = 60; y < height; y += 60) {
+          parent.append(svgNode("line", { x1: 24, y1: y, x2: width - 24, y2: y, stroke: line, "stroke-width": 0.8, opacity: 0.35 }));
+        }
+      }
+      if (profile.key === "claude") {
+        parent.append(svgNode("rect", { x: 18, y: 18, width: width - 36, height: height - 36, rx: 14, fill: "none", stroke: line, "stroke-width": 1, "stroke-dasharray": "2 8", opacity: 0.85 }));
+        if (label) addText(parent, label, 34, 42, { fill: muted, "font-size": 11, "font-weight": 720 });
+      }
+      if (profile.key === "dell") {
+        parent.append(svgNode("rect", { x: 18, y: 18, width: width - 36, height: height - 36, fill: "#ffffff", stroke: "#000000", "stroke-width": 2 }));
+        if (label) {
+          parent.append(svgNode("rect", { x: 18, y: 18, width: 150, height: 24, fill: "#fcc20f", stroke: "#000000", "stroke-width": 2 }));
+          addText(parent, label.toUpperCase(), 26, 35, { fill: "#000000", "font-size": 11, "font-weight": 900 });
+        }
+      }
+      if (profile.key === "spotify") {
+        for (let y = 56; y < height - 24; y += 56) {
+          parent.append(svgNode("line", { x1: 28, y1: y, x2: width - 28, y2: y, stroke: soft, "stroke-width": 1 }));
+        }
+      }
+    }
+
+    function svgCard(parent, item, width = 148, height = 72, options = {}) {
+      const profile = graphProfile();
+      const cardWidth = width + (options.noBonus ? 0 : profile.cardWidthBonus);
+      const radius = profile.key === "spotify" ? height / 2 : profile.key === "dell" ? 0 : Number.parseFloat(themeToken("--radius")) || 8;
+      const itemColor = colorFor(item);
+      const group = svgNode("g", { transform: `translate(${item.x}, ${item.y})` });
+      const fill = cardFillFor(profile, item);
+      const stroke = profile.key === "openai" ? themeToken("--svg-line") : profile.key === "dell" ? "#000000" : itemColor;
+      const shadowOffset = profile.key === "dell" ? 5 : 3;
+      const shadow = svgNode("rect", {
+        x: shadowOffset,
+        y: shadowOffset,
+        width: cardWidth,
+        height,
+        rx: radius,
+        fill: profile.key === "dell" ? "#000000" : themeToken("--card-shadow-fill")
+      });
+      const rect = svgNode("rect", {
+        width: cardWidth,
+        height,
+        rx: radius,
+        fill,
+        stroke,
+        "stroke-width": profile.key === "dell" ? 2 : profile.key === "openai" ? 1 : 1.4
+      });
+      const barWidth = profile.key === "openai" ? 0 : profile.key === "spotify" ? 0 : profile.key === "dell" ? 0 : 6;
+      const bar = svgNode("rect", {
+        width: barWidth,
+        height,
+        rx: Math.min(3, radius),
+        fill: itemColor
+      });
+      const foreign = svgNode("foreignObject", { x: profile.key === "openai" ? 0 : barWidth, y: 0, width: cardWidth - barWidth, height });
+      const div = document.createElement("div");
+      div.className = `svg-card svg-card--${profile.key}`;
+      div.style.border = "0";
+      div.style.borderRadius = "0";
+      div.style.setProperty("--node-color", itemColor);
+      const kicker = profileKicker(profile, item);
+      div.innerHTML = `${kicker ? `<span class="graph-kicker">${escapeHtml(kicker)}</span>` : ""}<strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.meta || "")}</span>`;
+      foreign.append(div);
+      group.append(shadow, rect);
+      if (barWidth > 0) group.append(bar);
+      group.append(foreign);
+      parent.append(group);
+      return group;
+    }
+
+    function renderMetrics() {
+      $("#goalMetric").textContent = mockSnapshot.goal;
+      $("#stateMetric").textContent = mockSnapshot.state;
+      $("#evidenceMetric").textContent = mockSnapshot.evidenceQuality;
+      $("#actionMetric").textContent = mockSnapshot.nextAction;
+    }
+
+    function renderGitGraph() {
+      const width = 900;
+      const height = 340;
+      const profile = graphProfile();
+      const svg = svgNode("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "Git branch graph mockup" });
+      const branchMap = new Map(mockSnapshot.branches.map((branch) => [branch.id, branch]));
+      const commitMap = new Map(mockSnapshot.commits.map((commit) => [commit.id, commit]));
+      const svgLine = themeToken("--svg-line");
+      const svgInk = themeToken("--svg-card-ink");
+      const svgMuted = themeToken("--svg-card-muted");
+
+      addGraphTexture(svg, width, height, "branch graph");
+      mockSnapshot.branches.forEach((branch) => {
+        const branchColor = colorFor(branch);
+        if (profile.key === "dell") {
+          const fill = profile.ribbonFills[branch.colorRole] || "#ffffff";
+          svg.append(svgNode("rect", { x: 52, y: branch.y - 20, width: 798, height: 40, fill, stroke: "#000000", "stroke-width": 2 }));
+          addText(svg, branch.label, 60, branch.y - 6, { fill: "#000000", "font-size": 10, "font-weight": 900 });
+        } else if (profile.key === "spotify") {
+          svg.append(svgNode("line", { x1: 54, y1: branch.y, x2: 850, y2: branch.y, stroke: svgLine, "stroke-width": 14, "stroke-linecap": "round", opacity: 0.7 }));
+          svg.append(svgNode("circle", { cx: 54, cy: branch.y, r: 5, fill: branchColor }));
+          addText(svg, branch.label, 68, branch.y - 18, { fill: branchColor, "font-size": 12, "font-weight": 800 });
+        } else if (profile.key === "hashicorp") {
+          svg.append(svgNode("line", { x1: 54, y1: branch.y, x2: 850, y2: branch.y, stroke: svgLine, "stroke-width": 2, "stroke-dasharray": "10 8" }));
+          svg.append(svgNode("rect", { x: 54, y: branch.y - 28, width: 132, height: 22, rx: 3, fill: themeToken("--svg-card-bg"), stroke: branchColor, "stroke-width": 1.4 }));
+          addText(svg, branch.label, 64, branch.y - 13, { fill: branchColor, "font-size": 11, "font-weight": 800 });
+        } else if (profile.key === "claude") {
+          svg.append(svgNode("line", { x1: 54, y1: branch.y, x2: 850, y2: branch.y, stroke: svgLine, "stroke-width": 2, "stroke-dasharray": "2 8", "stroke-linecap": "round" }));
+          addText(svg, `chapter · ${branch.label}`, 54, branch.y - 18, { fill: branchColor, "font-size": 12, "font-weight": 720, "font-family": themeToken("--font-display") });
+        } else {
+          svg.append(svgNode("line", { x1: 54, y1: branch.y, x2: 850, y2: branch.y, stroke: svgLine, "stroke-width": 1.4 }));
+          addText(svg, branch.label, 54, branch.y - 18, { fill: branchColor, "font-size": 12, "font-weight": 720 });
+        }
+      });
+
+      mockSnapshot.commitEdges.forEach(([fromId, toId]) => {
+        const from = commitMap.get(fromId);
+        const to = commitMap.get(toId);
+        const fromBranch = branchMap.get(from.branch);
+        const toBranch = branchMap.get(to.branch);
+        const edgeKind = fromBranch.y === toBranch.y && profile.key !== "spotify" ? "straight" : profile.edge;
+        if (profile.key === "dell") {
+          addConnector(svg, from.x, fromBranch.y, to.x, toBranch.y, "#000000", {
+            width: 7,
+            opacity: 1,
+            edge: edgeKind
+          });
+          addConnector(svg, from.x, fromBranch.y, to.x, toBranch.y, "#ffffff", {
+            width: 3,
+            opacity: 1,
+            edge: edgeKind
+          });
+          return;
+        }
+        addConnector(svg, from.x, fromBranch.y, to.x, toBranch.y, colorFor(toBranch), {
+          width: profile.key === "openai" ? 2 : profile.edgeWidth,
+          opacity: profile.key === "spotify" ? 0.9 : 0.72,
+          edge: edgeKind
+        });
+      });
+
+      mockSnapshot.commits.forEach((commit) => {
+        const branch = branchMap.get(commit.branch);
+        const branchColor = colorFor(branch);
+        if (profile.key === "dell") {
+          svg.append(svgNode("rect", { x: commit.x - 11, y: branch.y - 11, width: 22, height: 22, fill: "#ffffff", stroke: "#000000", "stroke-width": 2 }));
+          svg.append(svgNode("rect", { x: commit.x - 6, y: branch.y - 6, width: 12, height: 12, fill: branchColor, stroke: "#000000", "stroke-width": 1 }));
+        } else if (profile.key === "hashicorp") {
+          svg.append(svgNode("rect", { x: commit.x - 12, y: branch.y - 12, width: 24, height: 24, rx: 3, fill: branchColor }));
+          svg.append(svgNode("rect", { x: commit.x - 5, y: branch.y - 5, width: 10, height: 10, rx: 2, fill: themeToken("--svg-card-bg") }));
+        } else if (profile.key === "spotify") {
+          svg.append(svgNode("circle", { cx: commit.x, cy: branch.y, r: 16, fill: branchColor }));
+          svg.append(svgNode("polygon", { points: `${commit.x - 4},${branch.y - 7} ${commit.x - 4},${branch.y + 7} ${commit.x + 8},${branch.y}`, fill: "#000000" }));
+        } else if (profile.key === "claude") {
+          svg.append(svgNode("rect", { x: commit.x - 13, y: branch.y - 11, width: 26, height: 22, rx: 9, fill: themeToken("--svg-card-bg"), stroke: branchColor, "stroke-width": 2 }));
+          svg.append(svgNode("circle", { cx: commit.x, cy: branch.y, r: 4, fill: branchColor }));
+        } else {
+          svg.append(svgNode("circle", { cx: commit.x, cy: branch.y, r: 9, fill: themeToken("--svg-card-bg"), stroke: branchColor, "stroke-width": 3 }));
+        }
+        addText(svg, commit.label, commit.x - 42, branch.y + 34 + profile.labelShift, { fill: svgInk, "font-size": 12, "font-weight": 700 });
+        addText(svg, commit.note, commit.x - 42, branch.y + 51 + profile.labelShift, { fill: svgMuted, "font-size": 11 });
+      });
+
+      $("#gitGraph").append(svg);
+      $("#gitLegend").innerHTML = mockSnapshot.branches
+        .map((branch) => `<span class="legend-item"><i class="legend-dot" style="background:${colorFor(branch)}"></i>${branch.label}</span>`)
+        .join("");
+    }
+
+    function renderEpisodeGraph() {
+      const width = 820;
+      const height = 400;
+      const profile = graphProfile();
+      const cardWidth = 148 + profile.cardWidthBonus;
+      const svg = svgNode("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "Work episode graph mockup" });
+      const episodeMap = new Map(mockSnapshot.episodes.map((episode) => [episode.id, episode]));
+      const laneFill = themeToken("--lane-fill");
+      const linkLine = themeToken("--link-line");
+      const svgMuted = themeToken("--svg-card-muted");
+      const markerId = `episode-arrow-${profile.key}`;
+      const defs = svgNode("defs");
+      const marker = svgNode("marker", { id: markerId, markerWidth: 8, markerHeight: 8, refX: 7, refY: 4, orient: "auto" });
+      marker.append(svgNode("path", { d: "M 0 0 L 8 4 L 0 8 z", fill: linkLine }));
+      defs.append(marker);
+      svg.append(defs);
+
+      ["Sensemaking", "Contract", "Runtime"].forEach((lane, index) => {
+        const y = 70 + index * 108;
+        if (profile.key === "dell") {
+          const fill = ["#c0d4a7", "#d77a7a", "#9ab6c8"][index];
+          svg.append(svgNode("rect", { x: 32, y: y - 10, width: 748, height: 88, fill, stroke: "#000000", "stroke-width": 2 }));
+          svg.append(svgNode("rect", { x: 32, y: y - 10, width: 126, height: 24, fill: "#ffffff", stroke: "#000000", "stroke-width": 2 }));
+          addText(svg, lane.toUpperCase(), 40, y + 7, { fill: "#000000", "font-size": 10, "font-weight": 900 });
+        } else if (profile.key === "spotify") {
+          svg.append(svgNode("line", { x1: 34, y1: y + 36, x2: 780, y2: y + 36, stroke: laneFill, "stroke-width": 42, "stroke-linecap": "round", opacity: 0.82 }));
+          addText(svg, `${index + 1}. ${lane}`, 40, y - 8, { fill: svgMuted, "font-size": 12, "font-weight": 800 });
+        } else if (profile.key === "hashicorp") {
+          svg.append(svgNode("rect", { x: 34, y: y + 17, width: 746, height: 38, rx: 5, fill: laneFill, stroke: themeToken("--svg-line"), "stroke-width": 1 }));
+          addText(svg, lane, 40, y - 8, { fill: svgMuted, "font-size": 12, "font-weight": 800 });
+        } else if (profile.key === "claude") {
+          svg.append(svgNode("path", { d: `M 34 ${y + 36} C 220 ${y + 18}, 560 ${y + 52}, 780 ${y + 34}`, fill: "none", stroke: laneFill, "stroke-width": 26, "stroke-linecap": "round", opacity: 0.85 }));
+          addText(svg, `section ${index + 1} · ${lane}`, 36, y - 8, { fill: svgMuted, "font-size": 12, "font-weight": 720, "font-family": themeToken("--font-display") });
+        } else {
+          svg.append(svgNode("line", { x1: 34, y1: y + 36, x2: 780, y2: y + 36, stroke: laneFill, "stroke-width": 18, "stroke-linecap": "round" }));
+          addText(svg, lane, 36, y - 8, { fill: svgMuted, "font-size": 12, "font-weight": 720 });
+        }
+      });
+
+      mockSnapshot.episodeEdges.forEach(([fromId, toId]) => {
+        const from = episodeMap.get(fromId);
+        const to = episodeMap.get(toId);
+        addConnector(svg, from.x + cardWidth, from.y + 36, to.x, to.y + 36, linkLine, {
+          width: profile.key === "spotify" ? 4 : profile.edgeWidth,
+          markerEnd: markerId,
+          edge: profile.edge
+        });
+      });
+
+      mockSnapshot.episodes.forEach((episode) => svgCard(svg, episode, 148, 72));
+      $("#episodeGraph").append(svg);
+      $("#episodeStats").innerHTML = [
+        ["총 episode", "6개"],
+        ["활성 전환", "Contract → Runtime"],
+        ["핵심 병목", "snapshot schema"]
+      ].map(([label, value]) => `<div class="mini-card"><h3>${label}</h3><span>${value}</span></div>`).join("");
+    }
+
+    function renderDecisionMap() {
+      const width = 820;
+      const height = 400;
+      const profile = graphProfile();
+      const cardWidth = 148 + profile.cardWidthBonus;
+      const cardHeight = 76;
+      const svg = svgNode("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "Decision and alternative map mockup" });
+      const nodeMap = new Map(mockSnapshot.decisions.map((node) => [node.id, node]));
+      addGraphTexture(svg, width, height, "decision map");
+
+      if (profile.key === "spotify") {
+        const center = nodeMap.get("d0");
+        svg.append(svgNode("circle", { cx: center.x + cardWidth / 2, cy: center.y + cardHeight / 2, r: 144, fill: "none", stroke: themeToken("--lane-fill"), "stroke-width": 18, opacity: 0.55 }));
+      }
+
+      mockSnapshot.decisionEdges.forEach(([fromId, toId]) => {
+        const from = nodeMap.get(fromId);
+        const to = nodeMap.get(toId);
+        addConnector(svg, from.x + cardWidth / 2, from.y + cardHeight / 2, to.x + cardWidth / 2, to.y + cardHeight / 2, colorFor(to), {
+          width: profile.key === "openai" ? 1.8 : profile.edgeWidth,
+          edge: profile.key === "dell" || profile.key === "hashicorp" ? profile.edge : profile.key === "spotify" ? "arc" : "soft",
+          dash: to.kind === "later" ? (profile.key === "dell" ? "4 4" : "6 6") : ""
+        });
+      });
+
+      mockSnapshot.decisions.forEach((node) => svgCard(svg, node, 148, 76));
+      $("#decisionMap").append(svg);
+      $("#decisionStats").innerHTML = [
+        ["선택", "A 유지+보강, B 단일 서비스"],
+        ["fallback", "C batch-first"],
+        ["보류", "D plugin/MCP"]
+      ].map(([label, value]) => `<div class="mini-card"><h3>${label}</h3><span>${value}</span></div>`).join("");
+    }
+
+    function renderEvidenceGraph() {
+      const width = 820;
+      const height = 380;
+      const profile = graphProfile();
+      const claimWidth = 150 + profile.cardWidthBonus;
+      const svg = svgNode("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "Evidence graph mockup" });
+      const allNodes = [...mockSnapshot.claims, ...mockSnapshot.evidence];
+      const nodeMap = new Map(allNodes.map((node) => [node.id, node]));
+      const svgMuted = themeToken("--svg-card-muted");
+      const linkLine = themeToken("--link-line");
+      addGraphTexture(svg, width, height, "evidence");
+
+      const claimLabel = profile.key === "spotify" ? "Claims queue" : profile.key === "hashicorp" ? "Claim modules" : "Claims";
+      const evidenceLabel = profile.key === "spotify" ? "Source tracks" : profile.key === "hashicorp" ? "Evidence providers" : "Evidence";
+      const labelY = profile.key === "dell" ? 54 : 24;
+      addText(svg, claimLabel, 50, labelY, { fill: profile.key === "dell" ? "#000000" : svgMuted, "font-size": 12, "font-weight": 720 });
+      addText(svg, evidenceLabel, 592, labelY, { fill: profile.key === "dell" ? "#000000" : svgMuted, "font-size": 12, "font-weight": 720 });
+
+      mockSnapshot.evidenceEdges.forEach(([fromId, toId]) => {
+        const from = nodeMap.get(fromId);
+        const to = nodeMap.get(toId);
+        addConnector(svg, from.x + claimWidth, from.y + 36, to.x, to.y + 36, linkLine, {
+          width: profile.key === "openai" ? 1.8 : profile.edgeWidth,
+          edge: profile.key === "spotify" ? "arc" : profile.edge,
+          opacity: profile.key === "hashicorp" ? 0.9 : 0.75
+        });
+      });
+
+      mockSnapshot.claims.forEach((claim) => svgCard(svg, claim, 150, 70));
+      mockSnapshot.evidence.forEach((evidence) => svgCard(svg, evidence, 160, 66));
+      $("#evidenceGraph").append(svg);
+      $("#evidenceStats").innerHTML = [
+        ["강한 근거", "final-output.md"],
+        ["약한 근거", "future runtime data"],
+        ["진단 필요", "malformed events"]
+      ].map(([label, value]) => `<div class="mini-card"><h3>${label}</h3><span>${value}</span></div>`).join("");
+    }
+
+    function renderStateRisk() {
+      const profile = graphProfile();
+      $("#stateFlow").className = `state-flow state-flow--${profile.key}`;
+      const box = $("#riskBox");
+      box.className = `risk-box risk-box--${profile.key}`;
+      $("#stateFlow").innerHTML = mockSnapshot.states.map((state, index) => `
+        <div class="state-step">
+          <span class="step-index" style="background:${colorFor(state)}">${profile.key === "dell" ? `STEP ${index + 1}` : profile.key === "spotify" ? "▶" : index + 1}</span>
+          <span class="state-copy">
+            <strong>${state.title}</strong>
+            <span>${state.meta}</span>
+          </span>
+          <span class="tag ${state.status === "active" ? "teal" : state.status === "done" ? "blue" : state.status === "next" ? "amber" : "green"}">${state.status}</span>
+        </div>
+      `).join("");
+
+      [...box.querySelectorAll(".risk-point")].forEach((node) => node.remove());
+      mockSnapshot.risks.forEach((risk) => {
+        const node = document.createElement("div");
+        node.className = `risk-point ${risk.level} risk-point--${profile.key}`;
+        node.style.left = `${risk.impact}%`;
+        node.style.bottom = `${risk.certainty}%`;
+        if (profile.key === "dell") {
+          node.style.background = risk.level === "high" ? "#d77a7a" : risk.level === "medium" ? "#fcc20f" : "#c0d4a7";
+        }
+        node.innerHTML = `<strong>${risk.title}</strong><span>${risk.meta}</span>`;
+        box.append(node);
+      });
+    }
+
+    function clearRenderTargets() {
+      ["gitGraph", "gitLegend", "episodeGraph", "episodeStats", "decisionMap", "decisionStats", "evidenceGraph", "evidenceStats", "stateFlow"].forEach((id) => {
+        $(`#${id}`).innerHTML = "";
+      });
+      [...$("#riskBox").querySelectorAll(".risk-point")].forEach((node) => node.remove());
+    }
+
+    function applyDesign(design, mode) {
+      document.body.dataset.design = design;
+      document.body.dataset.mode = mode;
+      $("#designPreset").value = design;
+      $("#modePreset").value = mode;
+      $("#designNote").textContent = designNotes[design][mode];
+      localStorage.setItem("meta-monitor-mockup-design", design);
+      localStorage.setItem("meta-monitor-mockup-mode", mode);
+    }
+
+    function renderAll() {
+      clearRenderTargets();
+      renderMetrics();
+      renderGitGraph();
+      renderEpisodeGraph();
+      renderDecisionMap();
+      renderEvidenceGraph();
+      renderStateRisk();
+    }
+
+    $("#designPreset").addEventListener("change", (event) => {
+      applyDesign(event.target.value, $("#modePreset").value);
+      renderAll();
+    });
+
+    $("#modePreset").addEventListener("change", (event) => {
+      applyDesign($("#designPreset").value, event.target.value);
+      renderAll();
+    });
+
+    applyDesign(
+      localStorage.getItem("meta-monitor-mockup-design") || "openai",
+      localStorage.getItem("meta-monitor-mockup-mode") || "light"
+    );
+    renderAll();
+  </script>
+</body>
+</html>
