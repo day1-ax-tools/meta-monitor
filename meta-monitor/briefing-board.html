@@ -1,0 +1,1180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>메타 모니터 브리핑 보드</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #ffffff;
+      --ink: #212121;
+      --body: #3c3c3c;
+      --muted: #6e6e80;
+      --surface: #ffffff;
+      --surface-2: #f7f7f8;
+      --surface-3: #ececf1;
+      --line: #e5e5e5;
+      --soft-line: #ededed;
+      --accent: #10a37f;
+      --accent-hover: #0e9270;
+      --warn: #f5a623;
+      --danger: #ef4146;
+      --terminal: #343541;
+      --terminal-line: #444654;
+      --terminal-ink: #ececf1;
+      --code: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+      --sans: "Sohne", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+
+    main {
+      width: min(1200px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 32px 0 64px;
+    }
+
+    header {
+      display: grid;
+      gap: 18px;
+      padding: 24px 0 32px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .topline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge.good {
+      border-color: #d6eee6;
+      background: #e8f5f0;
+      color: var(--ink);
+    }
+
+    .badge.warn {
+      border-color: #edd4a8;
+      background: #fff7e8;
+      color: var(--warn);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 600;
+      line-height: 1.07;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    p { margin: 0 0 10px; color: var(--body); }
+    code { font-family: var(--code); font-size: 0.92em; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 16px;
+      padding-top: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 18px;
+    }
+
+    .tab-button {
+      border-color: var(--line);
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .tab-button:hover {
+      background: var(--surface-2);
+      border-color: #d4d4d4;
+    }
+
+    .tab-button[aria-selected="true"] {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .tab-panel[hidden] {
+      display: none;
+    }
+
+    .panel {
+      grid-column: span 4;
+      border: 1px solid var(--soft-line);
+      border-radius: 16px;
+      background: var(--surface);
+      padding: 20px;
+      min-width: 0;
+    }
+
+    .wide { grid-column: 1 / -1; }
+    .half { grid-column: span 6; }
+
+    .tui {
+      margin: 0;
+      border: 1px solid var(--terminal-line);
+      border-radius: 12px;
+      background: var(--terminal);
+      color: var(--terminal-ink);
+      padding: 16px;
+      overflow-x: auto;
+      font: 14px/1.55 var(--code);
+      white-space: pre-wrap;
+    }
+
+    .prompt { color: #6ee7b7; }
+    .dim { color: #9ca3af; }
+    .ok { color: #86efac; }
+    .attention { color: #fcd34d; }
+
+    .metric {
+      display: grid;
+      gap: 6px;
+    }
+
+    .metric strong {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .bar {
+      height: 8px;
+      border-radius: 999px;
+      background: #e7ece9;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: var(--value);
+      border-radius: inherit;
+      background: var(--accent);
+    }
+
+    textarea,
+    select,
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      padding: 12px 14px;
+      color: var(--ink);
+      font: 13px/1.5 var(--code);
+    }
+
+    textarea {
+      min-height: 124px;
+      resize: vertical;
+    }
+
+    label {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      min-height: 36px;
+      border: 1px solid var(--ink);
+      border-radius: 12px;
+      background: var(--ink);
+      color: #fff;
+      padding: 8px 12px;
+      font: 600 13px/1 var(--sans);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1a1a1a;
+      border-color: #1a1a1a;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    button.secondary {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    button.secondary:hover {
+      background: var(--surface-2);
+      border-color: #d4d4d4;
+    }
+
+    .icon-button {
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-color: var(--line);
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .icon-button:hover {
+      background: var(--surface-2);
+      border-color: #d4d4d4;
+    }
+
+    .icon-button svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #e8ecea;
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--body);
+    }
+
+    li + li { margin-top: 6px; }
+
+    .viz-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .viz-card {
+      border: 1px dashed #bfc8c3;
+      border-radius: 8px;
+      background: #fbfcfa;
+      padding: 14px;
+    }
+
+    .status-line {
+      min-height: 20px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .output-box {
+      min-height: 96px;
+      max-height: 280px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-2);
+      padding: 14px;
+      color: var(--ink);
+      font: 13px/1.55 var(--code);
+      white-space: pre-wrap;
+    }
+
+    .output-meta {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .console-shell {
+      display: grid;
+      gap: 12px;
+      border: 1px solid var(--terminal-line);
+      border-radius: 12px;
+      background: var(--terminal);
+      color: var(--terminal-ink);
+      padding: 14px;
+    }
+
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .console-header h2,
+    .console-header p {
+      color: var(--terminal-ink);
+    }
+
+    .console-header p {
+      margin: 0;
+      color: #c7c7d1;
+      font-size: 13px;
+    }
+
+    .console-status {
+      flex: 0 0 auto;
+      border: 1px solid #5d6472;
+      border-radius: 999px;
+      padding: 4px 9px;
+      color: #c7c7d1;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .console-status.live {
+      border-color: #4ade80;
+      color: #86efac;
+    }
+
+    .console-status.warn {
+      border-color: #facc15;
+      color: #fde68a;
+    }
+
+    .console-log {
+      min-height: 320px;
+      max-height: 440px;
+      overflow-y: auto;
+      border: 1px solid var(--terminal-line);
+      border-radius: 10px;
+      background: #202123;
+      padding: 14px;
+      font: 13px/1.55 var(--code);
+    }
+
+    .console-message {
+      display: grid;
+      gap: 4px;
+      padding: 10px 0;
+      border-bottom: 1px solid #3f414f;
+      white-space: pre-wrap;
+    }
+
+    .console-message:first-child {
+      padding-top: 0;
+    }
+
+    .console-message:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .console-role {
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .console-message.user .console-role {
+      color: #6ee7b7;
+    }
+
+    .console-message.main .console-role {
+      color: #fcd34d;
+    }
+
+    .console-message.monitor .console-role {
+      color: #93c5fd;
+    }
+
+    .console-message.system .console-role {
+      color: #fcd34d;
+    }
+
+    .console-body {
+      color: var(--terminal-ink);
+    }
+
+    .console-meta {
+      color: #9ca3af;
+      font-size: 12px;
+    }
+
+    .console-input {
+      display: grid;
+      gap: 8px;
+    }
+
+    .console-input textarea {
+      border-color: #565869;
+      background: #40414f;
+      color: #fff;
+    }
+
+    .settings-dialog {
+      width: min(760px, calc(100% - 32px));
+      max-height: min(86vh, 860px);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 0;
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .settings-dialog::backdrop {
+      background: rgba(33, 33, 33, 0.32);
+    }
+
+    .settings-dialog-inner {
+      display: grid;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .settings-dialog-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+    }
+
+    .settings-dialog-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 840px) {
+      main { width: min(100% - 24px, 1120px); }
+      .header-actions {
+        align-items: flex-start;
+      }
+      .panel,
+      .half {
+        grid-column: 1 / -1;
+      }
+      .settings-grid,
+      .viz-grid {
+        grid-template-columns: 1fr;
+      }
+      h1 { font-size: 34px; }
+      .topline {
+        max-width: calc(100% - 52px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="header-actions">
+        <div class="topline">
+          <span class="badge good">레포: day1-ax-tools/onboarding</span>
+          <span class="badge">로컬 폴더: onboarding-CLI</span>
+          <span class="badge">브랜치: main</span>
+          <span class="badge good">메인 세션: Codex / OpenAI</span>
+          <span class="badge good">모니터 세션: meta-monitor</span>
+          <span class="badge">마지막 갱신: 2026-06-02 17:16 KST</span>
+          <span class="badge good">현재 언어: 한국어 / 대체 언어: 영어</span>
+          <span class="badge good">쓰기 범위: meta-monitor/**만</span>
+          <span class="badge warn">컨텍스트 경고선: 70%</span>
+        </div>
+        <button class="icon-button" type="button" aria-label="모니터 설정 열기" title="설정" onclick="openSettings()">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path>
+            <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1A2 2 0 0 1 4.2 17l.1-.1A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1A2 2 0 0 1 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1A2 2 0 0 1 19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1a2 2 0 0 1 0 4H21a1.7 1.7 0 0 0-1.6 1Z"></path>
+          </svg>
+        </button>
+      </div>
+      <h1>메타 모니터 브리핑 보드</h1>
+      <p>메인 세션의 질문과 답변 흐름, 산출물, Git 상태를 관찰해 현재 상황과 다음 행동을 메타 레벨에서 설명하는 보조 현황판입니다. 숨겨진 모델 추론 과정은 관찰하지 않습니다.</p>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="브리핑 보드 화면">
+      <button class="tab-button" id="tab-mm-tui" type="button" role="tab" aria-selected="true" aria-controls="panel-mm-tui" data-tab="mm-tui">메타 모니터 콘솔</button>
+      <button class="tab-button" id="tab-status" type="button" role="tab" aria-selected="false" aria-controls="panel-status" data-tab="status">현황</button>
+      <button class="tab-button" id="tab-workmap" type="button" role="tab" aria-selected="false" aria-controls="panel-workmap" data-tab="workmap">업무 지도</button>
+      <button class="tab-button" id="tab-mission-backlog" type="button" role="tab" aria-selected="false" aria-controls="panel-mission-backlog" data-tab="mission-backlog">미션 백로그</button>
+      <button class="tab-button" id="tab-decision-map" type="button" role="tab" aria-selected="false" aria-controls="panel-decision-map" data-tab="decision-map">의사결정 지도</button>
+    </nav>
+
+    <section class="tab-panel grid" id="panel-mm-tui" role="tabpanel" aria-labelledby="tab-mm-tui" data-panel="mm-tui">
+      <div class="panel wide">
+        <div class="console-shell">
+          <div class="console-header">
+            <div>
+              <h2>실시간 모니터 콘솔</h2>
+              <p>메인 세션 이벤트를 우선 관찰하고, 필요할 때만 추가 질문을 큐로 보냅니다. 모니터 답변은 실시간 스트림으로 누적합니다.</p>
+            </div>
+            <span class="console-status warn" id="event-status">연결 준비</span>
+          </div>
+          <div class="console-log" id="monitor-console" role="log" aria-live="polite" aria-label="실시간 모니터 콘솔">
+            <div class="console-message system">
+              <span class="console-role">시스템</span>
+              <span class="console-body">모니터 콘솔을 준비했습니다. 브리지가 연결되면 최근 메인 세션 이벤트와 모니터 답변이 자동으로 표시됩니다.</span>
+              <span class="console-meta">쓰기 범위: meta-monitor/**</span>
+            </div>
+          </div>
+          <div class="console-input">
+            <textarea id="monitor-question">최근 메인 세션 흐름을 바탕으로, 지금 사용자가 놓치기 쉬운 점을 설명해주세요.</textarea>
+            <div class="actions">
+              <button type="button" onclick="submitQuestion()">제출</button>
+              <button class="secondary" type="button" onclick="refreshMonitorOutput()">출력 새로고침</button>
+              <span class="status-line" id="question-status" role="status" aria-live="polite"></span>
+              <span class="status-line" id="output-status" role="status" aria-live="polite"></span>
+            </div>
+          </div>
+          <p class="dim">메인 세션 이벤트: <code>meta-monitor/main-session-events.jsonl</code> · 추가 질문 큐: <code>meta-monitor/questions.jsonl</code> · 입력 JSON: <code>meta-monitor/monitor-input.latest.json</code> · 답변 파일: <code>meta-monitor/meta-advice.md</code> · 이벤트 스트림: <code>/api/events</code></p>
+        </div>
+      </div>
+
+      <div class="panel half">
+        <h2>최근 관찰 이벤트</h2>
+        <pre class="output-box" id="latest-question">아직 메인 세션 이벤트를 읽지 않았습니다.</pre>
+        <p class="output-meta" id="latest-question-meta">출처: <code>meta-monitor/main-session-events.jsonl</code></p>
+      </div>
+
+      <div class="panel half">
+        <h2>최근 모니터 답변</h2>
+        <pre class="output-box" id="monitor-output">아직 모니터 답변을 읽지 않았습니다.</pre>
+        <p class="output-meta" id="monitor-output-meta">출처: <code>meta-monitor/meta-advice.md</code></p>
+      </div>
+
+      <div class="panel wide">
+        <h2>출력 확인 방식</h2>
+        <p>메인 세션이 진행될 때마다 보이는 질문, 답변 요약, 파일 변경, 검증 결과를 <code>meta-monitor/main-session-events.jsonl</code>에 남깁니다. 모니터 CLI는 이 이벤트를 우선 읽어 <code>meta-monitor/monitor-input.latest.json</code>을 만들고, 그 결과를 <code>meta-monitor/meta-advice.md</code>에 씁니다. 추가 질문은 보조 경로로 <code>meta-monitor/questions.jsonl</code>에 쌓입니다.</p>
+      </div>
+    </section>
+
+    <section class="tab-panel grid" id="panel-status" role="tabpanel" aria-labelledby="tab-status" data-panel="status" hidden>
+      <div class="panel">
+        <h2>현재 단계</h2>
+        <p>CLI 온보딩 진입 페이지와 메타 모니터 계약을 다듬는 중입니다.</p>
+      </div>
+
+      <div class="panel">
+        <h2>현재 목표</h2>
+        <p>사용자가 CLI 작업으로 넘어가기 전에 선택형 모니터 경험을 이해할 수 있게 만듭니다.</p>
+      </div>
+
+      <div class="panel">
+        <h2>다음 행동</h2>
+        <p>이 브리핑 보드를 시각적으로 확인한 뒤, 현재 온보딩 변경사항의 커밋과 푸시 여부를 결정합니다.</p>
+      </div>
+
+      <div class="panel half">
+        <h2>진행 상황</h2>
+        <table>
+          <tr><th>단계</th><th>상태</th><th>근거</th></tr>
+          <tr><td>웹 진입점</td><td>검토 가능</td><td><code>web/index.html</code></td></tr>
+          <tr><td>설치 흐름</td><td>E2E 확인 완료</td><td>Codex/Claude, macOS/Windows, 셸 토글, 복사</td></tr>
+          <tr><td>메타 모니터 계약</td><td>초안 작성</td><td><code>README.md</code>, skill, 템플릿</td></tr>
+          <tr><td>실시간 모니터 세션</td><td>아직 시작 전</td><td>명시적 요청 필요</td></tr>
+        </table>
+      </div>
+
+      <div class="panel half">
+        <h2>작업 상태</h2>
+        <div class="metric">
+          <strong>수정 파일 11개와 모니터 산출물</strong>
+          <p>온보딩 변경사항은 아직 커밋 전이며, 새 모니터 산출물은 <code>meta-monitor/</code> 아래에 격리되어 있습니다.</p>
+          <div class="bar" aria-label="컨텍스트 사용량 추정치"><span style="--value: 18%"></span></div>
+          <p class="dim">예상 모니터 컨텍스트 사용량은 낮습니다. 아직 인계 문서는 필요하지 않습니다.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>결정 사항</h2>
+        <ul>
+          <li>HTML 모니터링 화면의 이름은 브리핑 보드로 둡니다.</li>
+          <li>메타 모니터는 사용자가 명시적으로 요청한 뒤에만 시작합니다.</li>
+          <li>초기 구현 경로는 skill과 산출물 계약으로 시작합니다.</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h2>열린 질문</h2>
+        <ul>
+          <li>이 페이지를 나중에 plugin 자산으로 배포할지 결정해야 합니다.</li>
+          <li>학습자에게 추천할 기본 provider와 model 조합을 정해야 합니다.</li>
+          <li>실시간 모니터 세션을 온보딩의 어느 시점에 소개할지 정해야 합니다.</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h2>위험 요소</h2>
+        <ul>
+          <li>정적 HTML은 모든 브라우저 환경에서 파일을 직접 쓸 수 없습니다.</li>
+          <li>모니터 세션은 <code>meta-monitor/**</code> 밖에 쓰지 않아야 합니다.</li>
+          <li>인계 문서가 누적되면 컨텍스트 오염이 생길 수 있습니다.</li>
+        </ul>
+      </div>
+
+      <div class="panel wide">
+        <h2>산출물 상태</h2>
+        <table>
+          <tr><th>산출물</th><th>상태</th><th>신호</th></tr>
+          <tr><td><code>meta-monitor/settings.json</code></td><td>생성됨</td><td>제공자, 모델, 컨텍스트와 함께 대체 언어 en, 현재 언어 ko 기록</td></tr>
+          <tr><td><code>meta-monitor/briefing-board.html</code></td><td>생성됨</td><td>현재 페이지</td></tr>
+          <tr><td><code>meta-monitor/main-session-events.jsonl</code></td><td>생성됨</td><td>메인 세션의 보이는 질문, 답변 요약, 결정, 산출물 변경 이벤트</td></tr>
+          <tr><td><code>meta-monitor/monitor-input.schema.json</code></td><td>생성됨</td><td>모니터 입력의 표준 JSON 구조</td></tr>
+          <tr><td><code>meta-monitor/monitor-prompt.md</code></td><td>생성됨</td><td>입력 JSON을 메타 설명으로 바꾸는 프롬프트 계약</td></tr>
+          <tr><td><code>meta-monitor/monitor-input.latest.json</code></td><td>워커 실행 시 생성</td><td>최근 메인 세션 이벤트와 Git 신호를 묶은 최신 입력</td></tr>
+          <tr><td><code>meta-monitor/questions.jsonl</code></td><td>제출 시 생성</td><td>추가 질문이 있을 때만 쓰는 보조 질문 큐</td></tr>
+          <tr><td><code>meta-monitor/session-data.jsonl</code></td><td>생성됨</td><td>생성 이벤트 1건 기록</td></tr>
+          <tr><td><code>meta-monitor/session-handoff.md</code></td><td>아직 불필요</td><td>컨텍스트 경고선에 도달하지 않음</td></tr>
+          <tr><td><code>git status</code></td><td>변경 있음</td><td>기존 온보딩 수정과 새 모니터 산출물 포함</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="tab-panel grid" id="panel-workmap" role="tabpanel" aria-labelledby="tab-workmap" data-panel="workmap" hidden>
+      <div class="panel wide">
+        <h2>업무 지도</h2>
+        <p>역할, 목적, 성과, 업무 영역, 작업 분해를 한 화면에서 확인하는 탭입니다. 상세 시각화가 필요하면 <code>meta-monitor/visualizations/work-map-dashboard.html</code>로 분리합니다.</p>
+      </div>
+      <div class="panel half">
+        <h2>지도 구성</h2>
+        <table>
+          <tr><th>층위</th><th>내용</th></tr>
+          <tr><td>목적</td><td>사용자가 어떤 결과를 만들기 위해 일하는지 정리합니다.</td></tr>
+          <tr><td>역할</td><td>사용자의 책임, 협업 대상, 판단 권한을 기록합니다.</td></tr>
+          <tr><td>업무 영역</td><td>반복되는 업무 묶음을 나누고 우선순위를 봅니다.</td></tr>
+          <tr><td>작업 단위</td><td>자동화 후보로 내려갈 수 있을 만큼 작게 쪼갭니다.</td></tr>
+        </table>
+      </div>
+      <div class="panel half">
+        <h2>현재 신호</h2>
+        <ul>
+          <li>업무 인터뷰는 아직 실제 사용자 업무 단계로 진입 전입니다.</li>
+          <li>앞단 환경설정과 모니터 경험을 먼저 안정화하고 있습니다.</li>
+          <li>다음 인터뷰에서는 역할 설명에서 시작해 자동화 후보까지 위에서 아래로 내려갑니다.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="tab-panel grid" id="panel-mission-backlog" role="tabpanel" aria-labelledby="tab-mission-backlog" data-panel="mission-backlog" hidden>
+      <div class="panel wide">
+        <h2>미션 백로그</h2>
+        <p>자동화 후보, 구현 후보, 검증이 필요한 후보를 모아두는 탭입니다. 상세 시각화가 필요하면 <code>meta-monitor/visualizations/mission-dashboard.html</code>로 분리합니다.</p>
+      </div>
+      <div class="panel wide">
+        <h2>분류 기준</h2>
+        <div class="viz-grid">
+          <div class="viz-card">
+            <strong>바로 실행</strong>
+            <p>입력과 출력이 명확하고, 위험이 낮고, 검증 방법이 분명한 작업입니다.</p>
+          </div>
+          <div class="viz-card">
+            <strong>설계 필요</strong>
+            <p>업무 가치는 있지만 데이터, 권한, 프로세스 경계가 더 필요한 작업입니다.</p>
+          </div>
+          <div class="viz-card">
+            <strong>보류</strong>
+            <p>현재 권한, 비용, 리스크, 검증 부담 때문에 나중에 다루는 작업입니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel grid" id="panel-decision-map" role="tabpanel" aria-labelledby="tab-decision-map" data-panel="decision-map" hidden>
+      <div class="panel wide">
+        <h2>의사결정 지도</h2>
+        <p>선택지, 장단점, 위험, 되돌릴 수 있는지 여부를 정리하는 탭입니다. 상세 시각화가 필요하면 <code>meta-monitor/visualizations/decision-map.html</code>로 분리합니다.</p>
+      </div>
+      <div class="panel">
+        <h2>현재 결정</h2>
+        <ul>
+          <li>브리핑 보드는 CLI를 대체하지 않고, CLI 작업을 관찰하고 보조합니다.</li>
+          <li>설정은 우상단 대화상자로 옮기고, 기본 화면은 작업 흐름에 집중합니다.</li>
+          <li>화면 구조는 탭으로 나누어 모니터 대화와 현황 확인을 분리합니다.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>남은 결정</h2>
+        <ul>
+          <li>메타 모니터를 스킬, 플러그인, MCP 중 어디까지 제품화할지 정해야 합니다.</li>
+          <li>초보자에게 실시간 모니터를 언제 보여줄지 정해야 합니다.</li>
+          <li>세션 데이터 기반 학습 기능의 첫 범위를 정해야 합니다.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>검증 관점</h2>
+        <ul>
+          <li>질문 제출이 끊기지 않는지 확인합니다.</li>
+          <li>모니터 쓰기 범위가 <code>meta-monitor/**</code>로 유지되는지 확인합니다.</li>
+          <li>인계 문서는 항상 최신 파일 하나만 남는지 확인합니다.</li>
+        </ul>
+      </div>
+    </section>
+
+    <dialog class="settings-dialog" id="settings-dialog" aria-labelledby="settings-title">
+      <div class="settings-dialog-inner">
+        <div class="settings-dialog-header">
+          <div>
+            <h2 id="settings-title">모니터 설정</h2>
+            <p>현재 모니터 세션에 적용할 OpenAI 스타일 브리핑 보드 설정입니다.</p>
+          </div>
+          <button class="secondary" type="button" onclick="closeSettings()">닫기</button>
+        </div>
+        <div class="settings-grid">
+          <label>제공자
+            <select id="provider">
+              <option value="openai">OpenAI</option>
+              <option value="anthropic">Anthropic</option>
+              <option value="local">로컬 모델</option>
+            </select>
+          </label>
+          <label>모델
+            <input id="model" value="gpt-5-codex">
+          </label>
+          <label>추론 강도
+            <select id="effort">
+              <option value="medium">보통</option>
+              <option value="low">낮음</option>
+              <option value="high">높음</option>
+            </select>
+          </label>
+          <label>언어 기준
+            <select id="language-source">
+              <option value="main-session-input">메인 세션 입력 기준</option>
+              <option value="fixed">고정값 사용</option>
+            </select>
+          </label>
+          <label>현재 언어
+            <select id="language-current">
+              <option value="ko">한국어</option>
+              <option value="en">영어</option>
+            </select>
+          </label>
+          <label>대체 언어
+            <select id="language-fallback">
+              <option value="en">영어</option>
+              <option value="ko">한국어</option>
+            </select>
+          </label>
+          <label>컨텍스트 크기
+            <input id="context-window" type="number" value="200000">
+          </label>
+          <label>컨텍스트 경고 비율
+            <input id="context-soft-limit" type="number" min="0.1" max="0.95" step="0.05" value="0.7">
+          </label>
+          <label>빠른 모드
+            <select id="fast-mode">
+              <option value="false">끄기</option>
+              <option value="true">켜기</option>
+            </select>
+          </label>
+        </div>
+        <textarea id="settings-json" aria-label="설정 JSON"></textarea>
+        <div class="actions">
+          <button type="button" onclick="copyText('meta-monitor/settings.json을 아래 JSON으로 갱신해주세요.\n\n' + document.getElementById('settings-json').value)">설정 반영 프롬프트 복사</button>
+          <button class="secondary" type="button" onclick="syncSettings()">JSON 새로 고침</button>
+          <span class="status-line" id="settings-status" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+    </dialog>
+  </main>
+
+  <script>
+    function settings() {
+      return {
+        version: 1,
+        enabled: true,
+        activation: "explicit",
+        provider: document.getElementById("provider").value,
+        model: document.getElementById("model").value,
+        effort: document.getElementById("effort").value,
+        language: {
+          source: document.getElementById("language-source").value,
+          current: document.getElementById("language-current").value,
+          fallback: document.getElementById("language-fallback").value
+        },
+        contextWindowTokens: Number(document.getElementById("context-window").value),
+        contextSoftLimitRatio: Number(document.getElementById("context-soft-limit").value),
+        fastMode: document.getElementById("fast-mode").value === "true",
+        questionTransport: {
+          type: "local-http-bridge",
+          endpoint: "/api/questions",
+          queue: "meta-monitor/questions.jsonl"
+        },
+        answerWorker: {
+          type: "codex-exec-read-only",
+          script: "meta-monitor/monitor-worker.mjs",
+          output: "meta-monitor/meta-advice.md",
+          state: "meta-monitor/monitor-state.json",
+          runtimeModel: "codex-cli-default"
+        },
+        monitorInput: {
+          schema: "meta-monitor/monitor-input.schema.json",
+          prompt: "meta-monitor/monitor-prompt.md",
+          events: "meta-monitor/main-session-events.jsonl",
+          latest: "meta-monitor/monitor-input.latest.json",
+          mode: "observe-main-session-first"
+        },
+        mainSession: {
+          provider: "openai",
+          model: "codex-cli-default",
+          sessionId: "main-session",
+          description: "Visible main AI CLI onboarding session"
+        },
+        design: {
+          source: "main-session-provider",
+          provider: "openai",
+          reference: "DESIGN.md"
+        },
+        writeScope: ["meta-monitor/**"],
+        readScope: ["**"],
+        briefingBoard: "meta-monitor/briefing-board.html",
+        sessionData: "meta-monitor/session-data.jsonl",
+        handoff: "meta-monitor/session-handoff.md"
+      };
+    }
+
+    function syncSettings() {
+      document.getElementById("settings-json").value = JSON.stringify(settings(), null, 2);
+    }
+
+    function openSettings() {
+      syncSettings();
+      document.getElementById("settings-dialog").showModal();
+    }
+
+    function closeSettings() {
+      document.getElementById("settings-dialog").close();
+    }
+
+    async function copyText(text) {
+      let copied = false;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          copied = true;
+        } catch (_) {
+          copied = false;
+        }
+      }
+      if (!copied) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        copied = document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+      const target = text.includes("settings.json") ? "settings-status" : "question-status";
+      document.getElementById(target).textContent = copied ? "복사됨" : "복사 실패";
+    }
+
+    const seenConsoleKeys = new Set();
+    let eventSource = null;
+
+    function setEventStatus(text, mode = "warn") {
+      const status = document.getElementById("event-status");
+      status.textContent = text;
+      status.classList.toggle("live", mode === "live");
+      status.classList.toggle("warn", mode !== "live");
+    }
+
+    function shortId(id) {
+      return String(id || "").slice(0, 8);
+    }
+
+    function consoleKey(prefix, value) {
+      return `${prefix}:${value || "empty"}`;
+    }
+
+    function appendConsoleMessage({ key, role, body, meta }) {
+      if (key && seenConsoleKeys.has(key)) {
+        return;
+      }
+      if (key) {
+        seenConsoleKeys.add(key);
+      }
+      const consoleNode = document.getElementById("monitor-console");
+      const message = document.createElement("div");
+      message.className = `console-message ${role}`;
+
+      const roleNode = document.createElement("span");
+      roleNode.className = "console-role";
+      roleNode.textContent = role === "user" ? "추가 질문" : role === "main" ? "메인 세션" : role === "monitor" ? "모니터" : "시스템";
+
+      const bodyNode = document.createElement("span");
+      bodyNode.className = "console-body";
+      bodyNode.textContent = body;
+
+      message.append(roleNode, bodyNode);
+      if (meta) {
+        const metaNode = document.createElement("span");
+        metaNode.className = "console-meta";
+        metaNode.textContent = meta;
+        message.append(metaNode);
+      }
+      consoleNode.append(message);
+      consoleNode.scrollTop = consoleNode.scrollHeight;
+    }
+
+    function renderMonitorSnapshot(payload, source = "pull") {
+      const latestQuestion = document.getElementById("latest-question");
+      const latestQuestionMeta = document.getElementById("latest-question-meta");
+      const monitorOutput = document.getElementById("monitor-output");
+      const monitorOutputMeta = document.getElementById("monitor-output-meta");
+      const mainEvent = payload.latestMainSessionEvent;
+      const mainSessionEventsMeta = payload.mainSessionEvents || { path: "meta-monitor/main-session-events.jsonl", updatedAt: "" };
+      const question = payload.latestQuestion;
+
+      if (mainEvent) {
+        latestQuestion.textContent = `${mainEvent.summary || mainEvent.content || "요약 없음"}\n\n이벤트 ID: ${mainEvent.eventId}\n유형: ${mainEvent.eventType}\n시각: ${formatTimestamp(mainEvent.timestamp)}`;
+        appendConsoleMessage({
+          key: consoleKey("main", mainEvent.eventId),
+          role: "main",
+          body: mainEvent.summary || mainEvent.content || "메인 세션 이벤트가 기록되었습니다.",
+          meta: `이벤트 ID ${shortId(mainEvent.eventId)} · ${formatTimestamp(mainEvent.timestamp)}`
+        });
+      } else {
+        latestQuestion.textContent = "아직 메인 세션 이벤트가 없습니다. 메인 세션이 보이는 질문, 답변 요약, 결정, 검증 결과를 main-session-events.jsonl에 남기면 여기에 표시됩니다.";
+      }
+      latestQuestionMeta.innerHTML = `출처: <code>${mainSessionEventsMeta.path}</code>${mainSessionEventsMeta.updatedAt ? ` · 갱신: ${formatTimestamp(mainSessionEventsMeta.updatedAt)}` : " · 아직 없음"}`;
+
+      if (question) {
+        appendConsoleMessage({
+          key: consoleKey("q", question.id),
+          role: "user",
+          body: question.question,
+          meta: `추가 질문 ID ${shortId(question.id)} · ${formatTimestamp(question.timestamp)}`
+        });
+      }
+
+      const adviceText = String(payload.advice.text || "").trim();
+      if (adviceText) {
+        monitorOutput.textContent = adviceText;
+        appendConsoleMessage({
+          key: consoleKey("a", `${payload.advice.updatedAt}:${adviceText.length}`),
+          role: "monitor",
+          body: adviceText,
+          meta: `답변 파일 갱신 · ${formatTimestamp(payload.advice.updatedAt)}`
+        });
+      } else {
+        monitorOutput.textContent = "아직 모니터 답변 파일이 없습니다. 모니터 CLI가 main-session-events.jsonl을 읽고 meta-monitor/meta-advice.md에 답변을 쓰면 여기에 표시됩니다.";
+      }
+      monitorOutputMeta.innerHTML = `출처: <code>${payload.advice.path}</code>${payload.advice.updatedAt ? ` · 갱신: ${formatTimestamp(payload.advice.updatedAt)}` : " · 아직 없음"}`;
+
+      if (mainEvent && (!payload.advice.exists || !adviceText || new Date(payload.advice.updatedAt) < new Date(mainEvent.timestamp))) {
+        appendConsoleMessage({
+          key: consoleKey("pending-main", mainEvent.eventId),
+          role: "system",
+          body: "메인 세션 이벤트는 기록되었지만 아직 모니터 답변 파일이 갱신되지 않았습니다. 모니터 CLI가 monitor-input.latest.json을 만들고 meta-advice.md를 쓰면 이 콘솔에 자동으로 표시됩니다.",
+          meta: `대기 중인 이벤트 ID ${shortId(mainEvent.eventId)}`
+        });
+        document.getElementById("output-status").textContent = "모니터 관찰 대기 중";
+      } else if (question && (!payload.advice.exists || !adviceText || new Date(payload.advice.updatedAt) < new Date(question.timestamp))) {
+        appendConsoleMessage({
+          key: consoleKey("pending", question.id),
+          role: "system",
+          body: "추가 질문은 큐에 들어갔지만 아직 모니터 답변 파일이 갱신되지 않았습니다.",
+          meta: `대기 중인 추가 질문 ID ${shortId(question.id)}`
+        });
+        document.getElementById("output-status").textContent = "모니터 답변 대기 중";
+      }
+
+      if (source === "event") {
+        if (!question || payload.advice.exists) {
+          document.getElementById("output-status").textContent = "실시간 갱신됨";
+        }
+      }
+    }
+
+    async function submitQuestion() {
+      const status = document.getElementById("question-status");
+      const question = document.getElementById("monitor-question").value.trim();
+      if (!question) {
+        status.textContent = "질문이 비어 있습니다";
+        return;
+      }
+      if (window.location.protocol === "file:") {
+        status.textContent = "먼저 브리지를 실행하세요";
+        return;
+      }
+      try {
+        const response = await fetch("/api/questions", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            question,
+            source: "briefing-board",
+            createdAt: new Date().toISOString()
+          })
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const payload = await response.json();
+        status.textContent = `제출됨 · 질문 ID ${String(payload.id || "").slice(0, 8)}`;
+        await refreshMonitorOutput();
+      } catch (_) {
+        status.textContent = "브리지에 연결할 수 없습니다";
+      }
+    }
+
+    function formatTimestamp(value) {
+      if (!value) return "";
+      try {
+        return new Intl.DateTimeFormat("ko-KR", {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }).format(new Date(value));
+      } catch (_) {
+        return value;
+      }
+    }
+
+    async function refreshMonitorOutput() {
+      const status = document.getElementById("output-status");
+
+      if (window.location.protocol === "file:") {
+        status.textContent = "먼저 브리지를 실행하세요";
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/monitor-output", { headers: { accept: "application/json" } });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        renderMonitorSnapshot(await response.json(), "pull");
+        status.textContent = "출력 갱신됨";
+      } catch (_) {
+        status.textContent = "출력을 읽을 수 없습니다";
+      }
+    }
+
+    function connectMonitorEvents() {
+      if (window.location.protocol === "file:") {
+        setEventStatus("브리지 필요");
+        return;
+      }
+      if (!window.EventSource) {
+        setEventStatus("수동 갱신");
+        appendConsoleMessage({
+          key: "system:no-eventsource",
+          role: "system",
+          body: "이 브라우저에서는 실시간 스트림을 사용할 수 없습니다. 출력 새로고침을 사용해주세요.",
+          meta: ""
+        });
+        return;
+      }
+      eventSource = new EventSource("/api/events");
+      setEventStatus("연결 중");
+      eventSource.addEventListener("hello", () => {
+        setEventStatus("실시간 연결됨", "live");
+        appendConsoleMessage({
+          key: "system:event-connected",
+          role: "system",
+          body: "실시간 모니터 스트림이 연결되었습니다.",
+          meta: "이후 질문과 답변 변경은 자동으로 콘솔에 표시됩니다."
+        });
+      });
+      eventSource.addEventListener("snapshot", (message) => {
+        setEventStatus("실시간 연결됨", "live");
+        renderMonitorSnapshot(JSON.parse(message.data), "event");
+      });
+      eventSource.onerror = () => {
+        setEventStatus("재연결 중");
+      };
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll("[data-tab]").forEach((button) => {
+        const selected = button.dataset.tab === tabName;
+        button.setAttribute("aria-selected", String(selected));
+      });
+      document.querySelectorAll("[data-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== tabName;
+      });
+    }
+
+    document.querySelectorAll("[data-tab]").forEach((button) => {
+      button.addEventListener("click", () => switchTab(button.dataset.tab));
+    });
+
+    document.querySelectorAll("#provider,#model,#effort,#language-source,#language-current,#language-fallback,#context-window,#context-soft-limit,#fast-mode").forEach((node) => {
+      node.addEventListener("input", syncSettings);
+      node.addEventListener("change", syncSettings);
+    });
+    syncSettings();
+    refreshMonitorOutput();
+    connectMonitorEvents();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+meta-monitor/.codex-answer.tmp
+meta-monitor/main-session-events.jsonl
+meta-monitor/meta-advice.md
+meta-monitor/monitor-input.latest.json
+meta-monitor/monitor-state.json
+meta-monitor/questions.jsonl
+meta-monitor/session-data.jsonl
+meta-monitor/session-handoff.md
+meta-monitor/visualizations/
+node_modules/
+.DS_Store

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "enabled": true,
+  "activation": "explicit",
+  "provider": "openai",
+  "model": "gpt-5-codex",
+  "effort": "medium",
+  "language": {
+    "source": "main-session-input",
+    "current": "ko",
+    "fallback": "en"
+  },
+  "contextWindowTokens": 200000,
+  "contextSoftLimitRatio": 0.7,
+  "fastMode": false,
+  "questionTransport": {
+    "type": "local-http-bridge",
+    "endpoint": "/api/questions",
+    "queue": "meta-monitor/questions.jsonl"
+  },
+  "answerWorker": {
+    "type": "codex-exec-read-only",
+    "script": "meta-monitor/monitor-worker.mjs",
+    "output": "meta-monitor/meta-advice.md",
+    "state": "meta-monitor/monitor-state.json",
+    "runtimeModel": "codex-cli-default"
+  },
+  "monitorInput": {
+    "schema": "meta-monitor/monitor-input.schema.json",
+    "prompt": "meta-monitor/monitor-prompt.md",
+    "events": "meta-monitor/main-session-events.jsonl",
+    "latest": "meta-monitor/monitor-input.latest.json",
+    "mode": "observe-main-session-first"
+  },
+  "mainSession": {
+    "provider": "openai",
+    "model": "codex-cli-default",
+    "sessionId": "main-session",
+    "description": "Visible main AI CLI onboarding session"
+  },
+  "design": {
+    "source": "main-session-provider",
+    "provider": "openai",
+    "reference": "DESIGN.md"
+  },
+  "writeScope": ["meta-monitor/**"],
+  "readScope": ["**"],
+  "briefingBoard": "meta-monitor/briefing-board.html",
+  "sessionData": "meta-monitor/session-data.jsonl",
+  "handoff": "meta-monitor/session-handoff.md"
+}

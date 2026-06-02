@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://day1-ax-tools.local/onboarding/meta-monitor/monitor-input.schema.json",
+  "title": "Meta Monitor Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "generatedAt",
+    "repo",
+    "language",
+    "monitorMode",
+    "mainSession",
+    "sourcePolicy",
+    "mainSessionEvents",
+    "manualQuestions",
+    "repoSignals",
+    "artifacts",
+    "previousAdvice"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "repo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root", "branch"],
+      "properties": {
+        "root": { "type": "string" },
+        "remote": { "type": "string" },
+        "branch": { "type": "string" }
+      }
+    },
+    "language": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current", "fallback", "source"],
+      "properties": {
+        "current": { "type": "string" },
+        "fallback": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+    "monitorMode": {
+      "type": "string",
+      "enum": ["observe-main-session", "answer-manual-question", "handoff"]
+    },
+    "mainSession": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "sessionId", "description"],
+      "properties": {
+        "provider": { "type": "string" },
+        "model": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "sourcePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowedSources", "excludedSources", "writeScope"],
+      "properties": {
+        "allowedSources": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "excludedSources": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "writeScope": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "mainSessionEvents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/mainSessionEvent" }
+    },
+    "manualQuestions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/manualQuestion" }
+    },
+    "repoSignals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gitStatusShort", "gitDiffStat"],
+      "properties": {
+        "gitStatusShort": { "type": "string" },
+        "gitDiffStat": { "type": "string" }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "settings",
+        "briefingBoard",
+        "metaAdvice",
+        "monitorState",
+        "sessionData",
+        "mainSessionEvents",
+        "monitorInput",
+        "monitorPrompt"
+      ],
+      "properties": {
+        "settings": { "$ref": "#/$defs/artifactRef" },
+        "briefingBoard": { "$ref": "#/$defs/artifactRef" },
+        "metaAdvice": { "$ref": "#/$defs/artifactRef" },
+        "monitorState": { "$ref": "#/$defs/artifactRef" },
+        "sessionData": { "$ref": "#/$defs/artifactRef" },
+        "mainSessionEvents": { "$ref": "#/$defs/artifactRef" },
+        "monitorInput": { "$ref": "#/$defs/artifactRef" },
+        "monitorPrompt": { "$ref": "#/$defs/artifactRef" }
+      }
+    },
+    "previousAdvice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exists", "updatedAt", "preview"],
+      "properties": {
+        "exists": { "type": "boolean" },
+        "updatedAt": { "type": "string" },
+        "preview": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "mainSessionEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eventId",
+        "timestamp",
+        "turnId",
+        "role",
+        "eventType",
+        "visibility",
+        "summary",
+        "content",
+        "evidenceRefs",
+        "artifactsRead",
+        "artifactsWritten",
+        "commands",
+        "decisions",
+        "risks",
+        "nextActions"
+      ],
+      "properties": {
+        "eventId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "turnId": { "type": "string" },
+        "role": {
+          "type": "string",
+          "enum": ["user", "main-assistant", "tool", "system-summary", "artifact"]
+        },
+        "eventType": {
+          "type": "string",
+          "enum": ["user-request", "assistant-response", "tool-summary", "artifact-change", "verification", "decision", "handoff"]
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["visible", "exported-summary"]
+        },
+        "summary": { "type": "string" },
+        "content": { "type": "string" },
+        "evidenceRefs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "artifactsRead": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "artifactsWritten": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "commands": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "decisions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "risks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "nextActions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "manualQuestion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "timestamp", "source", "question"],
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source": { "type": "string" },
+        "question": { "type": "string" }
+      }
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "exists", "updatedAt"],
+      "properties": {
+        "path": { "type": "string" },
+        "exists": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      }
+    }
+  }
+}
