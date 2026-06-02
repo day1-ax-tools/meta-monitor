@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Meta Monitor Session Visualization Mockups</title>
+  <title>Meta Guardian Session Visualization Mockups</title>
   <style>
     :root {
       color-scheme: light;
@@ -1224,8 +1224,8 @@
 
   <script>
     const mockSnapshot = {
-      sessionId: "mock-20260602-meta-monitor",
-      goal: "세션 이해 모델 중심의 Meta Monitor 구조 탐색",
+      sessionId: "mock-20260602-meta-guardian",
+      goal: "세션 이해 모델 중심의 Meta Guardian 구조 탐색",
       state: "snapshot contract 결정 전",
       evidenceQuality: "중간 이상 · 9-lens review 기반",
       nextAction: "session-snapshot schema 초안 작성",
@@ -1249,7 +1249,7 @@
       episodes: [
         { id: "e1", lane: "Sensemaking", x: 72, y: 82, title: "목적 재정의", meta: "시각화가 핵심 가치", colorRole: "violet" },
         { id: "e2", lane: "Sensemaking", x: 270, y: 82, title: "9-lens 리뷰", meta: "session model 부재 발견", colorRole: "violet" },
-        { id: "e3", lane: "Contract", x: 270, y: 190, title: "Snapshot 권위", meta: "monitor input은 debug packet", colorRole: "teal" },
+        { id: "e3", lane: "Contract", x: 270, y: 190, title: "Snapshot 권위", meta: "guardian input은 debug packet", colorRole: "teal" },
         { id: "e4", lane: "Contract", x: 468, y: 190, title: "View models", meta: "timeline / decision / risk", colorRole: "teal" },
         { id: "e5", lane: "Runtime", x: 468, y: 298, title: "Health + retry", meta: "timeout, lastError, stale", colorRole: "rose" },
         { id: "e6", lane: "Runtime", x: 666, y: 298, title: "One command", meta: "live optional", colorRole: "green" }
@@ -1270,8 +1270,8 @@
       ],
       evidence: [
         { id: "ev1", x: 592, y: 44, title: "final-output.md", meta: "9-lens consensus", colorRole: "violet" },
-        { id: "ev2", x: 592, y: 122, title: "briefing-board.html", meta: "static content", colorRole: "amber" },
-        { id: "ev3", x: 592, y: 200, title: "monitor-worker.mjs", meta: "state/retry path", colorRole: "blue" },
+        { id: "ev2", x: 592, y: 122, title: "guardian-board.html", meta: "static content", colorRole: "amber" },
+        { id: "ev3", x: 592, y: 200, title: "guardian-worker.mjs", meta: "state/retry path", colorRole: "blue" },
         { id: "ev4", x: 592, y: 278, title: "schema + prompt", meta: "contract drift", colorRole: "teal" }
       ],
       evidenceEdges: [
@@ -1823,8 +1823,8 @@
       $("#designPreset").value = design;
       $("#modePreset").value = mode;
       $("#designNote").textContent = designNotes[design][mode];
-      localStorage.setItem("meta-monitor-mockup-design", design);
-      localStorage.setItem("meta-monitor-mockup-mode", mode);
+      localStorage.setItem("meta-guardian-mockup-design", design);
+      localStorage.setItem("meta-guardian-mockup-mode", mode);
     }
 
     function renderAll() {
@@ -1848,8 +1848,8 @@
     });
 
     applyDesign(
-      localStorage.getItem("meta-monitor-mockup-design") || "openai",
-      localStorage.getItem("meta-monitor-mockup-mode") || "light"
+      localStorage.getItem("meta-guardian-mockup-design") || "openai",
+      localStorage.getItem("meta-guardian-mockup-mode") || "light"
     );
     renderAll();
   </script>

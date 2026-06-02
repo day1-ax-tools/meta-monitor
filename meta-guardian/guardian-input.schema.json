@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://day1-ax-tools.local/onboarding/meta-monitor/monitor-input.schema.json",
-  "title": "Meta Monitor Input",
+  "$id": "https://day1-ax-tools.local/meta-guardian/guardian-input.schema.json",
+  "title": "Meta Guardian Input",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -9,7 +9,7 @@
     "generatedAt",
     "repo",
     "language",
-    "monitorMode",
+    "guardianMode",
     "mainSession",
     "sourcePolicy",
     "mainSessionEvents",
@@ -47,7 +47,7 @@
         "source": { "type": "string" }
       }
     },
-    "monitorMode": {
+    "guardianMode": {
       "type": "string",
       "enum": ["observe-main-session", "answer-manual-question", "handoff"]
     },
@@ -103,23 +103,23 @@
       "additionalProperties": false,
       "required": [
         "settings",
-        "briefingBoard",
-        "metaAdvice",
-        "monitorState",
+        "guardianBoard",
+        "guardianAdvice",
+        "guardianState",
         "sessionData",
         "mainSessionEvents",
-        "monitorInput",
-        "monitorPrompt"
+        "guardianInput",
+        "guardianPrompt"
       ],
       "properties": {
         "settings": { "$ref": "#/$defs/artifactRef" },
-        "briefingBoard": { "$ref": "#/$defs/artifactRef" },
-        "metaAdvice": { "$ref": "#/$defs/artifactRef" },
-        "monitorState": { "$ref": "#/$defs/artifactRef" },
+        "guardianBoard": { "$ref": "#/$defs/artifactRef" },
+        "guardianAdvice": { "$ref": "#/$defs/artifactRef" },
+        "guardianState": { "$ref": "#/$defs/artifactRef" },
         "sessionData": { "$ref": "#/$defs/artifactRef" },
         "mainSessionEvents": { "$ref": "#/$defs/artifactRef" },
-        "monitorInput": { "$ref": "#/$defs/artifactRef" },
-        "monitorPrompt": { "$ref": "#/$defs/artifactRef" }
+        "guardianInput": { "$ref": "#/$defs/artifactRef" },
+        "guardianPrompt": { "$ref": "#/$defs/artifactRef" }
       }
     },
     "previousAdvice": {

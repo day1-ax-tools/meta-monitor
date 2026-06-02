@@ -1,11 +1,11 @@
 {
-  "name": "@day1-ax-tools/meta-monitor",
+  "name": "@day1-ax-tools/meta-guardian",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node --check meta-monitor/bridge-server.mjs && node --check meta-monitor/monitor-worker.mjs && node -e 'for (const f of [\"meta-monitor/settings.example.json\", \"meta-monitor/monitor-input.schema.json\"]) JSON.parse(require(\"fs\").readFileSync(f, \"utf8\")); console.log(\"json ok\")'",
-    "bridge": "node meta-monitor/bridge-server.mjs",
-    "worker": "node meta-monitor/monitor-worker.mjs"
+    "check": "node --check meta-guardian/bridge-server.mjs && node --check meta-guardian/guardian-worker.mjs && node -e 'for (const f of [\"meta-guardian/settings.example.json\", \"meta-guardian/guardian-input.schema.json\"]) JSON.parse(require(\"fs\").readFileSync(f, \"utf8\")); console.log(\"json ok\")'",
+    "bridge": "node meta-guardian/bridge-server.mjs",
+    "worker": "node meta-guardian/guardian-worker.mjs"
   }
 }

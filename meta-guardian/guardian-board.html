@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>메타 모니터 브리핑 보드</title>
+  <title>메타 가디언 브리핑 보드</title>
   <style>
     :root {
       color-scheme: light;
@@ -449,7 +449,7 @@
       color: #fcd34d;
     }
 
-    .console-message.monitor .console-role {
+    .console-message.guardian .console-role {
       color: #93c5fd;
     }
 
@@ -537,32 +537,32 @@
     <header>
       <div class="header-actions">
         <div class="topline">
-          <span class="badge good">레포: day1-ax-tools/onboarding</span>
-          <span class="badge">로컬 폴더: onboarding-CLI</span>
+          <span class="badge good">레포: day1-ax-tools/meta-guardian</span>
+          <span class="badge">로컬 폴더: meta-guardian</span>
           <span class="badge">브랜치: main</span>
           <span class="badge good">메인 세션: Codex / OpenAI</span>
-          <span class="badge good">모니터 세션: meta-monitor</span>
+          <span class="badge good">가디언 세션: meta-guardian</span>
           <span class="badge">마지막 갱신: 2026-06-02 17:16 KST</span>
           <span class="badge good">현재 언어: 한국어 / 대체 언어: 영어</span>
-          <span class="badge good">쓰기 범위: meta-monitor/**만</span>
+          <span class="badge good">쓰기 범위: meta-guardian/**만</span>
           <span class="badge warn">컨텍스트 경고선: 70%</span>
         </div>
-        <button class="icon-button" type="button" aria-label="모니터 설정 열기" title="설정" onclick="openSettings()">
+        <button class="icon-button" type="button" aria-label="가디언 설정 열기" title="설정" onclick="openSettings()">
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path>
             <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1A2 2 0 0 1 4.2 17l.1-.1A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1A2 2 0 0 1 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1A2 2 0 0 1 19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1a2 2 0 0 1 0 4H21a1.7 1.7 0 0 0-1.6 1Z"></path>
           </svg>
         </button>
       </div>
-      <h1>메타 모니터 브리핑 보드</h1>
+      <h1>메타 가디언 브리핑 보드</h1>
       <p>메인 세션의 질문과 답변 흐름, 산출물, Git 상태를 관찰해 현재 상황과 다음 행동을 메타 레벨에서 설명하는 보조 현황판입니다. 숨겨진 모델 추론 과정은 관찰하지 않습니다.</p>
     </header>
 
     <nav class="tabs" role="tablist" aria-label="브리핑 보드 화면">
-      <button class="tab-button" id="tab-mm-tui" type="button" role="tab" aria-selected="true" aria-controls="panel-mm-tui" data-tab="mm-tui">메타 모니터 콘솔</button>
+      <button class="tab-button" id="tab-mm-tui" type="button" role="tab" aria-selected="true" aria-controls="panel-mm-tui" data-tab="mm-tui">메타 가디언 콘솔</button>
       <button class="tab-button" id="tab-status" type="button" role="tab" aria-selected="false" aria-controls="panel-status" data-tab="status">현황</button>
       <button class="tab-button" id="tab-workmap" type="button" role="tab" aria-selected="false" aria-controls="panel-workmap" data-tab="workmap">업무 지도</button>
-      <button class="tab-button" id="tab-mission-backlog" type="button" role="tab" aria-selected="false" aria-controls="panel-mission-backlog" data-tab="mission-backlog">미션 백로그</button>
+      <button class="tab-button" id="tab-candidate-backlog" type="button" role="tab" aria-selected="false" aria-controls="panel-candidate-backlog" data-tab="candidate-backlog">작업 후보</button>
       <button class="tab-button" id="tab-decision-map" type="button" role="tab" aria-selected="false" aria-controls="panel-decision-map" data-tab="decision-map">의사결정 지도</button>
     </nav>
 
@@ -571,101 +571,101 @@
         <div class="console-shell">
           <div class="console-header">
             <div>
-              <h2>실시간 모니터 콘솔</h2>
-              <p>메인 세션 이벤트를 우선 관찰하고, 필요할 때만 추가 질문을 큐로 보냅니다. 모니터 답변은 실시간 스트림으로 누적합니다.</p>
+              <h2>실시간 가디언 콘솔</h2>
+              <p>메인 세션 이벤트를 우선 관찰하고, 필요할 때만 추가 질문을 큐로 보냅니다. 가디언 답변은 실시간 스트림으로 누적합니다.</p>
             </div>
             <span class="console-status warn" id="event-status">연결 준비</span>
           </div>
-          <div class="console-log" id="monitor-console" role="log" aria-live="polite" aria-label="실시간 모니터 콘솔">
+          <div class="console-log" id="guardian-console" role="log" aria-live="polite" aria-label="실시간 가디언 콘솔">
             <div class="console-message system">
               <span class="console-role">시스템</span>
-              <span class="console-body">모니터 콘솔을 준비했습니다. 브리지가 연결되면 최근 메인 세션 이벤트와 모니터 답변이 자동으로 표시됩니다.</span>
-              <span class="console-meta">쓰기 범위: meta-monitor/**</span>
+              <span class="console-body">가디언 콘솔을 준비했습니다. 브리지가 연결되면 최근 메인 세션 이벤트와 가디언 답변이 자동으로 표시됩니다.</span>
+              <span class="console-meta">쓰기 범위: meta-guardian/**</span>
             </div>
           </div>
           <div class="console-input">
-            <textarea id="monitor-question">최근 메인 세션 흐름을 바탕으로, 지금 사용자가 놓치기 쉬운 점을 설명해주세요.</textarea>
+            <textarea id="guardian-question">최근 메인 세션 흐름을 바탕으로, 지금 사용자가 놓치기 쉬운 점을 설명해주세요.</textarea>
             <div class="actions">
               <button type="button" onclick="submitQuestion()">제출</button>
-              <button class="secondary" type="button" onclick="refreshMonitorOutput()">출력 새로고침</button>
+              <button class="secondary" type="button" onclick="refreshGuardianOutput()">출력 새로고침</button>
               <span class="status-line" id="question-status" role="status" aria-live="polite"></span>
               <span class="status-line" id="output-status" role="status" aria-live="polite"></span>
             </div>
           </div>
-          <p class="dim">메인 세션 이벤트: <code>meta-monitor/main-session-events.jsonl</code> · 추가 질문 큐: <code>meta-monitor/questions.jsonl</code> · 입력 JSON: <code>meta-monitor/monitor-input.latest.json</code> · 답변 파일: <code>meta-monitor/meta-advice.md</code> · 이벤트 스트림: <code>/api/events</code></p>
+          <p class="dim">메인 세션 이벤트: <code>meta-guardian/main-session-events.jsonl</code> · 추가 질문 큐: <code>meta-guardian/questions.jsonl</code> · 입력 JSON: <code>meta-guardian/guardian-input.latest.json</code> · 답변 파일: <code>meta-guardian/guardian-advice.md</code> · 이벤트 스트림: <code>/api/events</code></p>
         </div>
       </div>
 
       <div class="panel half">
         <h2>최근 관찰 이벤트</h2>
         <pre class="output-box" id="latest-question">아직 메인 세션 이벤트를 읽지 않았습니다.</pre>
-        <p class="output-meta" id="latest-question-meta">출처: <code>meta-monitor/main-session-events.jsonl</code></p>
+        <p class="output-meta" id="latest-question-meta">출처: <code>meta-guardian/main-session-events.jsonl</code></p>
       </div>
 
       <div class="panel half">
-        <h2>최근 모니터 답변</h2>
-        <pre class="output-box" id="monitor-output">아직 모니터 답변을 읽지 않았습니다.</pre>
-        <p class="output-meta" id="monitor-output-meta">출처: <code>meta-monitor/meta-advice.md</code></p>
+        <h2>최근 가디언 답변</h2>
+        <pre class="output-box" id="guardian-output">아직 가디언 답변을 읽지 않았습니다.</pre>
+        <p class="output-meta" id="guardian-output-meta">출처: <code>meta-guardian/guardian-advice.md</code></p>
       </div>
 
       <div class="panel wide">
         <h2>출력 확인 방식</h2>
-        <p>메인 세션이 진행될 때마다 보이는 질문, 답변 요약, 파일 변경, 검증 결과를 <code>meta-monitor/main-session-events.jsonl</code>에 남깁니다. 모니터 CLI는 이 이벤트를 우선 읽어 <code>meta-monitor/monitor-input.latest.json</code>을 만들고, 그 결과를 <code>meta-monitor/meta-advice.md</code>에 씁니다. 추가 질문은 보조 경로로 <code>meta-monitor/questions.jsonl</code>에 쌓입니다.</p>
+        <p>메인 세션이 진행될 때마다 보이는 질문, 답변 요약, 파일 변경, 검증 결과를 <code>meta-guardian/main-session-events.jsonl</code>에 남깁니다. 가디언 CLI는 이 이벤트를 우선 읽어 <code>meta-guardian/guardian-input.latest.json</code>을 만들고, 그 결과를 <code>meta-guardian/guardian-advice.md</code>에 씁니다. 추가 질문은 보조 경로로 <code>meta-guardian/questions.jsonl</code>에 쌓입니다.</p>
       </div>
     </section>
 
     <section class="tab-panel grid" id="panel-status" role="tabpanel" aria-labelledby="tab-status" data-panel="status" hidden>
       <div class="panel">
         <h2>현재 단계</h2>
-        <p>CLI 온보딩 진입 페이지와 메타 모니터 계약을 다듬는 중입니다.</p>
+        <p>메타 가디언 런타임 계약과 가디언 보드 표면을 다듬는 중입니다.</p>
       </div>
 
       <div class="panel">
         <h2>현재 목표</h2>
-        <p>사용자가 CLI 작업으로 넘어가기 전에 선택형 모니터 경험을 이해할 수 있게 만듭니다.</p>
+        <p>사용자가 별도 메타 정보를 강제로 입력하지 않아도 작업 흐름의 목표 정렬과 위험 신호를 빠르게 이해할 수 있게 만듭니다.</p>
       </div>
 
       <div class="panel">
         <h2>다음 행동</h2>
-        <p>이 브리핑 보드를 시각적으로 확인한 뒤, 현재 온보딩 변경사항의 커밋과 푸시 여부를 결정합니다.</p>
+        <p>가디언 보드를 실제 세션 snapshot projection으로 바꾸기 위한 다음 구현 단위를 결정합니다.</p>
       </div>
 
       <div class="panel half">
         <h2>진행 상황</h2>
         <table>
           <tr><th>단계</th><th>상태</th><th>근거</th></tr>
-          <tr><td>웹 진입점</td><td>검토 가능</td><td><code>web/index.html</code></td></tr>
-          <tr><td>설치 흐름</td><td>E2E 확인 완료</td><td>Codex/Claude, macOS/Windows, 셸 토글, 복사</td></tr>
-          <tr><td>메타 모니터 계약</td><td>초안 작성</td><td><code>README.md</code>, skill, 템플릿</td></tr>
-          <tr><td>실시간 모니터 세션</td><td>아직 시작 전</td><td>명시적 요청 필요</td></tr>
+          <tr><td>가디언 런타임</td><td>검토 가능</td><td><code>meta-guardian/</code></td></tr>
+          <tr><td>입력 계약</td><td>초안 작성</td><td><code>guardian-input.schema.json</code></td></tr>
+          <tr><td>가디언 프롬프트</td><td>초안 작성</td><td><code>guardian-prompt.md</code></td></tr>
+          <tr><td>가디언 보드</td><td>실행 가능</td><td><code>guardian-board.html</code></td></tr>
         </table>
       </div>
 
       <div class="panel half">
         <h2>작업 상태</h2>
         <div class="metric">
-          <strong>수정 파일 11개와 모니터 산출물</strong>
-          <p>온보딩 변경사항은 아직 커밋 전이며, 새 모니터 산출물은 <code>meta-monitor/</code> 아래에 격리되어 있습니다.</p>
+          <strong>가디언 런타임 패키지</strong>
+          <p>소스 파일은 <code>meta-guardian/</code> 아래에 있고, 런타임 산출물도 같은 경계 안에 격리됩니다.</p>
           <div class="bar" aria-label="컨텍스트 사용량 추정치"><span style="--value: 18%"></span></div>
-          <p class="dim">예상 모니터 컨텍스트 사용량은 낮습니다. 아직 인계 문서는 필요하지 않습니다.</p>
+          <p class="dim">예상 가디언 컨텍스트 사용량은 낮습니다. 아직 인계 문서는 필요하지 않습니다.</p>
         </div>
       </div>
 
       <div class="panel">
         <h2>결정 사항</h2>
         <ul>
-          <li>HTML 모니터링 화면의 이름은 브리핑 보드로 둡니다.</li>
-          <li>메타 모니터는 사용자가 명시적으로 요청한 뒤에만 시작합니다.</li>
-          <li>초기 구현 경로는 skill과 산출물 계약으로 시작합니다.</li>
+          <li>HTML 화면의 이름은 가디언 보드로 둡니다.</li>
+          <li>메타 가디언은 visible session data를 우선 관찰합니다.</li>
+          <li>초기 구현 경로는 guardian input과 guardian advice 계약으로 시작합니다.</li>
         </ul>
       </div>
 
       <div class="panel">
         <h2>열린 질문</h2>
         <ul>
-          <li>이 페이지를 나중에 plugin 자산으로 배포할지 결정해야 합니다.</li>
-          <li>학습자에게 추천할 기본 provider와 model 조합을 정해야 합니다.</li>
-          <li>실시간 모니터 세션을 온보딩의 어느 시점에 소개할지 정해야 합니다.</li>
+          <li>guardian snapshot을 언제 canonical artifact로 승격할지 결정해야 합니다.</li>
+          <li>목표 추론 confidence와 사용자 확인 질문의 기준을 정해야 합니다.</li>
+          <li>기술/도구 추천을 언제 웹검색 기반 scout action으로 전환할지 정해야 합니다.</li>
         </ul>
       </div>
 
@@ -673,7 +673,7 @@
         <h2>위험 요소</h2>
         <ul>
           <li>정적 HTML은 모든 브라우저 환경에서 파일을 직접 쓸 수 없습니다.</li>
-          <li>모니터 세션은 <code>meta-monitor/**</code> 밖에 쓰지 않아야 합니다.</li>
+          <li>가디언 세션은 <code>meta-guardian/**</code> 밖에 쓰지 않아야 합니다.</li>
           <li>인계 문서가 누적되면 컨텍스트 오염이 생길 수 있습니다.</li>
         </ul>
       </div>
@@ -682,16 +682,16 @@
         <h2>산출물 상태</h2>
         <table>
           <tr><th>산출물</th><th>상태</th><th>신호</th></tr>
-          <tr><td><code>meta-monitor/settings.json</code></td><td>생성됨</td><td>제공자, 모델, 컨텍스트와 함께 대체 언어 en, 현재 언어 ko 기록</td></tr>
-          <tr><td><code>meta-monitor/briefing-board.html</code></td><td>생성됨</td><td>현재 페이지</td></tr>
-          <tr><td><code>meta-monitor/main-session-events.jsonl</code></td><td>생성됨</td><td>메인 세션의 보이는 질문, 답변 요약, 결정, 산출물 변경 이벤트</td></tr>
-          <tr><td><code>meta-monitor/monitor-input.schema.json</code></td><td>생성됨</td><td>모니터 입력의 표준 JSON 구조</td></tr>
-          <tr><td><code>meta-monitor/monitor-prompt.md</code></td><td>생성됨</td><td>입력 JSON을 메타 설명으로 바꾸는 프롬프트 계약</td></tr>
-          <tr><td><code>meta-monitor/monitor-input.latest.json</code></td><td>워커 실행 시 생성</td><td>최근 메인 세션 이벤트와 Git 신호를 묶은 최신 입력</td></tr>
-          <tr><td><code>meta-monitor/questions.jsonl</code></td><td>제출 시 생성</td><td>추가 질문이 있을 때만 쓰는 보조 질문 큐</td></tr>
-          <tr><td><code>meta-monitor/session-data.jsonl</code></td><td>생성됨</td><td>생성 이벤트 1건 기록</td></tr>
-          <tr><td><code>meta-monitor/session-handoff.md</code></td><td>아직 불필요</td><td>컨텍스트 경고선에 도달하지 않음</td></tr>
-          <tr><td><code>git status</code></td><td>변경 있음</td><td>기존 온보딩 수정과 새 모니터 산출물 포함</td></tr>
+          <tr><td><code>meta-guardian/settings.json</code></td><td>생성됨</td><td>제공자, 모델, 컨텍스트와 함께 대체 언어 en, 현재 언어 ko 기록</td></tr>
+          <tr><td><code>meta-guardian/guardian-board.html</code></td><td>생성됨</td><td>현재 페이지</td></tr>
+          <tr><td><code>meta-guardian/main-session-events.jsonl</code></td><td>생성됨</td><td>메인 세션의 보이는 질문, 답변 요약, 결정, 산출물 변경 이벤트</td></tr>
+          <tr><td><code>meta-guardian/guardian-input.schema.json</code></td><td>생성됨</td><td>가디언 입력의 표준 JSON 구조</td></tr>
+          <tr><td><code>meta-guardian/guardian-prompt.md</code></td><td>생성됨</td><td>입력 JSON을 메타 설명으로 바꾸는 프롬프트 계약</td></tr>
+          <tr><td><code>meta-guardian/guardian-input.latest.json</code></td><td>워커 실행 시 생성</td><td>최근 메인 세션 이벤트와 Git 신호를 묶은 최신 입력</td></tr>
+          <tr><td><code>meta-guardian/questions.jsonl</code></td><td>제출 시 생성</td><td>추가 질문이 있을 때만 쓰는 보조 질문 큐</td></tr>
+          <tr><td><code>meta-guardian/session-data.jsonl</code></td><td>생성됨</td><td>생성 이벤트 1건 기록</td></tr>
+          <tr><td><code>meta-guardian/session-handoff.md</code></td><td>아직 불필요</td><td>컨텍스트 경고선에 도달하지 않음</td></tr>
+          <tr><td><code>git status</code></td><td>변경 감지</td><td>가디언 런타임과 보드 변경 추적</td></tr>
         </table>
       </div>
     </section>
@@ -699,7 +699,7 @@
     <section class="tab-panel grid" id="panel-workmap" role="tabpanel" aria-labelledby="tab-workmap" data-panel="workmap" hidden>
       <div class="panel wide">
         <h2>업무 지도</h2>
-        <p>역할, 목적, 성과, 업무 영역, 작업 분해를 한 화면에서 확인하는 탭입니다. 상세 시각화가 필요하면 <code>meta-monitor/visualizations/work-map-dashboard.html</code>로 분리합니다.</p>
+        <p>역할, 목적, 성과, 업무 영역, 작업 분해를 한 화면에서 확인하는 탭입니다. 상세 시각화가 필요하면 <code>meta-guardian/visualizations/work-map-dashboard.html</code>로 분리합니다.</p>
       </div>
       <div class="panel half">
         <h2>지도 구성</h2>
@@ -715,16 +715,16 @@
         <h2>현재 신호</h2>
         <ul>
           <li>업무 인터뷰는 아직 실제 사용자 업무 단계로 진입 전입니다.</li>
-          <li>앞단 환경설정과 모니터 경험을 먼저 안정화하고 있습니다.</li>
+          <li>앞단 환경설정과 가디언 경험을 먼저 안정화하고 있습니다.</li>
           <li>다음 인터뷰에서는 역할 설명에서 시작해 자동화 후보까지 위에서 아래로 내려갑니다.</li>
         </ul>
       </div>
     </section>
 
-    <section class="tab-panel grid" id="panel-mission-backlog" role="tabpanel" aria-labelledby="tab-mission-backlog" data-panel="mission-backlog" hidden>
+    <section class="tab-panel grid" id="panel-candidate-backlog" role="tabpanel" aria-labelledby="tab-candidate-backlog" data-panel="candidate-backlog" hidden>
       <div class="panel wide">
-        <h2>미션 백로그</h2>
-        <p>자동화 후보, 구현 후보, 검증이 필요한 후보를 모아두는 탭입니다. 상세 시각화가 필요하면 <code>meta-monitor/visualizations/mission-dashboard.html</code>로 분리합니다.</p>
+        <h2>작업 후보</h2>
+        <p>개입 후보, 구현 후보, 검증이 필요한 후보를 모아두는 탭입니다. 상세 시각화가 필요하면 <code>meta-guardian/visualizations/candidate-dashboard.html</code>로 분리합니다.</p>
       </div>
       <div class="panel wide">
         <h2>분류 기준</h2>
@@ -748,21 +748,21 @@
     <section class="tab-panel grid" id="panel-decision-map" role="tabpanel" aria-labelledby="tab-decision-map" data-panel="decision-map" hidden>
       <div class="panel wide">
         <h2>의사결정 지도</h2>
-        <p>선택지, 장단점, 위험, 되돌릴 수 있는지 여부를 정리하는 탭입니다. 상세 시각화가 필요하면 <code>meta-monitor/visualizations/decision-map.html</code>로 분리합니다.</p>
+        <p>선택지, 장단점, 위험, 되돌릴 수 있는지 여부를 정리하는 탭입니다. 상세 시각화가 필요하면 <code>meta-guardian/visualizations/decision-map.html</code>로 분리합니다.</p>
       </div>
       <div class="panel">
         <h2>현재 결정</h2>
         <ul>
           <li>브리핑 보드는 CLI를 대체하지 않고, CLI 작업을 관찰하고 보조합니다.</li>
           <li>설정은 우상단 대화상자로 옮기고, 기본 화면은 작업 흐름에 집중합니다.</li>
-          <li>화면 구조는 탭으로 나누어 모니터 대화와 현황 확인을 분리합니다.</li>
+          <li>화면 구조는 탭으로 나누어 가디언 대화와 현황 확인을 분리합니다.</li>
         </ul>
       </div>
       <div class="panel">
         <h2>남은 결정</h2>
         <ul>
-          <li>메타 모니터를 스킬, 플러그인, MCP 중 어디까지 제품화할지 정해야 합니다.</li>
-          <li>초보자에게 실시간 모니터를 언제 보여줄지 정해야 합니다.</li>
+          <li>메타 가디언을 스킬, 플러그인, MCP 중 어디까지 제품화할지 정해야 합니다.</li>
+          <li>작업자에게 실시간 가디언을 언제 보여줄지 정해야 합니다.</li>
           <li>세션 데이터 기반 학습 기능의 첫 범위를 정해야 합니다.</li>
         </ul>
       </div>
@@ -770,7 +770,7 @@
         <h2>검증 관점</h2>
         <ul>
           <li>질문 제출이 끊기지 않는지 확인합니다.</li>
-          <li>모니터 쓰기 범위가 <code>meta-monitor/**</code>로 유지되는지 확인합니다.</li>
+          <li>가디언 쓰기 범위가 <code>meta-guardian/**</code>로 유지되는지 확인합니다.</li>
           <li>인계 문서는 항상 최신 파일 하나만 남는지 확인합니다.</li>
         </ul>
       </div>
@@ -780,8 +780,8 @@
       <div class="settings-dialog-inner">
         <div class="settings-dialog-header">
           <div>
-            <h2 id="settings-title">모니터 설정</h2>
-            <p>현재 모니터 세션에 적용할 OpenAI 스타일 브리핑 보드 설정입니다.</p>
+            <h2 id="settings-title">가디언 설정</h2>
+            <p>현재 가디언 세션에 적용할 OpenAI 스타일 브리핑 보드 설정입니다.</p>
           </div>
           <button class="secondary" type="button" onclick="closeSettings()">닫기</button>
         </div>
@@ -836,7 +836,7 @@
         </div>
         <textarea id="settings-json" aria-label="설정 JSON"></textarea>
         <div class="actions">
-          <button type="button" onclick="copyText('meta-monitor/settings.json을 아래 JSON으로 갱신해주세요.\n\n' + document.getElementById('settings-json').value)">설정 반영 프롬프트 복사</button>
+          <button type="button" onclick="copyText('meta-guardian/settings.json을 아래 JSON으로 갱신해주세요.\n\n' + document.getElementById('settings-json').value)">설정 반영 프롬프트 복사</button>
           <button class="secondary" type="button" onclick="syncSettings()">JSON 새로 고침</button>
           <span class="status-line" id="settings-status" role="status" aria-live="polite"></span>
         </div>
@@ -864,38 +864,38 @@
         questionTransport: {
           type: "local-http-bridge",
           endpoint: "/api/questions",
-          queue: "meta-monitor/questions.jsonl"
+          queue: "meta-guardian/questions.jsonl"
         },
         answerWorker: {
           type: "codex-exec-read-only",
-          script: "meta-monitor/monitor-worker.mjs",
-          output: "meta-monitor/meta-advice.md",
-          state: "meta-monitor/monitor-state.json",
+          script: "meta-guardian/guardian-worker.mjs",
+          output: "meta-guardian/guardian-advice.md",
+          state: "meta-guardian/guardian-state.json",
           runtimeModel: "codex-cli-default"
         },
-        monitorInput: {
-          schema: "meta-monitor/monitor-input.schema.json",
-          prompt: "meta-monitor/monitor-prompt.md",
-          events: "meta-monitor/main-session-events.jsonl",
-          latest: "meta-monitor/monitor-input.latest.json",
+        guardianInput: {
+          schema: "meta-guardian/guardian-input.schema.json",
+          prompt: "meta-guardian/guardian-prompt.md",
+          events: "meta-guardian/main-session-events.jsonl",
+          latest: "meta-guardian/guardian-input.latest.json",
           mode: "observe-main-session-first"
         },
         mainSession: {
           provider: "openai",
           model: "codex-cli-default",
           sessionId: "main-session",
-          description: "Visible main AI CLI onboarding session"
+          description: "Visible main AI CLI session"
         },
         design: {
           source: "main-session-provider",
           provider: "openai",
           reference: "DESIGN.md"
         },
-        writeScope: ["meta-monitor/**"],
+        writeScope: ["meta-guardian/**"],
         readScope: ["**"],
-        briefingBoard: "meta-monitor/briefing-board.html",
-        sessionData: "meta-monitor/session-data.jsonl",
-        handoff: "meta-monitor/session-handoff.md"
+        guardianBoard: "meta-guardian/guardian-board.html",
+        sessionData: "meta-guardian/session-data.jsonl",
+        handoff: "meta-guardian/session-handoff.md"
       };
     }
 
@@ -962,13 +962,13 @@
       if (key) {
         seenConsoleKeys.add(key);
       }
-      const consoleNode = document.getElementById("monitor-console");
+      const consoleNode = document.getElementById("guardian-console");
       const message = document.createElement("div");
       message.className = `console-message ${role}`;
 
       const roleNode = document.createElement("span");
       roleNode.className = "console-role";
-      roleNode.textContent = role === "user" ? "추가 질문" : role === "main" ? "메인 세션" : role === "monitor" ? "모니터" : "시스템";
+      roleNode.textContent = role === "user" ? "추가 질문" : role === "main" ? "메인 세션" : role === "guardian" ? "가디언" : "시스템";
 
       const bodyNode = document.createElement("span");
       bodyNode.className = "console-body";
@@ -985,13 +985,13 @@
       consoleNode.scrollTop = consoleNode.scrollHeight;
     }
 
-    function renderMonitorSnapshot(payload, source = "pull") {
+    function renderGuardianSnapshot(payload, source = "pull") {
       const latestQuestion = document.getElementById("latest-question");
       const latestQuestionMeta = document.getElementById("latest-question-meta");
-      const monitorOutput = document.getElementById("monitor-output");
-      const monitorOutputMeta = document.getElementById("monitor-output-meta");
+      const guardianOutput = document.getElementById("guardian-output");
+      const guardianOutputMeta = document.getElementById("guardian-output-meta");
       const mainEvent = payload.latestMainSessionEvent;
-      const mainSessionEventsMeta = payload.mainSessionEvents || { path: "meta-monitor/main-session-events.jsonl", updatedAt: "" };
+      const mainSessionEventsMeta = payload.mainSessionEvents || { path: "meta-guardian/main-session-events.jsonl", updatedAt: "" };
       const question = payload.latestQuestion;
 
       if (mainEvent) {
@@ -1018,34 +1018,34 @@
 
       const adviceText = String(payload.advice.text || "").trim();
       if (adviceText) {
-        monitorOutput.textContent = adviceText;
+        guardianOutput.textContent = adviceText;
         appendConsoleMessage({
           key: consoleKey("a", `${payload.advice.updatedAt}:${adviceText.length}`),
-          role: "monitor",
+          role: "guardian",
           body: adviceText,
           meta: `답변 파일 갱신 · ${formatTimestamp(payload.advice.updatedAt)}`
         });
       } else {
-        monitorOutput.textContent = "아직 모니터 답변 파일이 없습니다. 모니터 CLI가 main-session-events.jsonl을 읽고 meta-monitor/meta-advice.md에 답변을 쓰면 여기에 표시됩니다.";
+        guardianOutput.textContent = "아직 가디언 답변 파일이 없습니다. 가디언 CLI가 main-session-events.jsonl을 읽고 meta-guardian/guardian-advice.md에 답변을 쓰면 여기에 표시됩니다.";
       }
-      monitorOutputMeta.innerHTML = `출처: <code>${payload.advice.path}</code>${payload.advice.updatedAt ? ` · 갱신: ${formatTimestamp(payload.advice.updatedAt)}` : " · 아직 없음"}`;
+      guardianOutputMeta.innerHTML = `출처: <code>${payload.advice.path}</code>${payload.advice.updatedAt ? ` · 갱신: ${formatTimestamp(payload.advice.updatedAt)}` : " · 아직 없음"}`;
 
       if (mainEvent && (!payload.advice.exists || !adviceText || new Date(payload.advice.updatedAt) < new Date(mainEvent.timestamp))) {
         appendConsoleMessage({
           key: consoleKey("pending-main", mainEvent.eventId),
           role: "system",
-          body: "메인 세션 이벤트는 기록되었지만 아직 모니터 답변 파일이 갱신되지 않았습니다. 모니터 CLI가 monitor-input.latest.json을 만들고 meta-advice.md를 쓰면 이 콘솔에 자동으로 표시됩니다.",
+          body: "메인 세션 이벤트는 기록되었지만 아직 가디언 답변 파일이 갱신되지 않았습니다. 가디언 CLI가 guardian-input.latest.json을 만들고 guardian-advice.md를 쓰면 이 콘솔에 자동으로 표시됩니다.",
           meta: `대기 중인 이벤트 ID ${shortId(mainEvent.eventId)}`
         });
-        document.getElementById("output-status").textContent = "모니터 관찰 대기 중";
+        document.getElementById("output-status").textContent = "가디언 관찰 대기 중";
       } else if (question && (!payload.advice.exists || !adviceText || new Date(payload.advice.updatedAt) < new Date(question.timestamp))) {
         appendConsoleMessage({
           key: consoleKey("pending", question.id),
           role: "system",
-          body: "추가 질문은 큐에 들어갔지만 아직 모니터 답변 파일이 갱신되지 않았습니다.",
+          body: "추가 질문은 큐에 들어갔지만 아직 가디언 답변 파일이 갱신되지 않았습니다.",
           meta: `대기 중인 추가 질문 ID ${shortId(question.id)}`
         });
-        document.getElementById("output-status").textContent = "모니터 답변 대기 중";
+        document.getElementById("output-status").textContent = "가디언 답변 대기 중";
       }
 
       if (source === "event") {
@@ -1057,7 +1057,7 @@
 
     async function submitQuestion() {
       const status = document.getElementById("question-status");
-      const question = document.getElementById("monitor-question").value.trim();
+      const question = document.getElementById("guardian-question").value.trim();
       if (!question) {
         status.textContent = "질문이 비어 있습니다";
         return;
@@ -1072,7 +1072,7 @@
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
             question,
-            source: "briefing-board",
+            source: "guardian-board",
             createdAt: new Date().toISOString()
           })
         });
@@ -1081,7 +1081,7 @@
         }
         const payload = await response.json();
         status.textContent = `제출됨 · 질문 ID ${String(payload.id || "").slice(0, 8)}`;
-        await refreshMonitorOutput();
+        await refreshGuardianOutput();
       } catch (_) {
         status.textContent = "브리지에 연결할 수 없습니다";
       }
@@ -1099,7 +1099,7 @@
       }
     }
 
-    async function refreshMonitorOutput() {
+    async function refreshGuardianOutput() {
       const status = document.getElementById("output-status");
 
       if (window.location.protocol === "file:") {
@@ -1108,18 +1108,18 @@
       }
 
       try {
-        const response = await fetch("/api/monitor-output", { headers: { accept: "application/json" } });
+        const response = await fetch("/api/guardian-output", { headers: { accept: "application/json" } });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
-        renderMonitorSnapshot(await response.json(), "pull");
+        renderGuardianSnapshot(await response.json(), "pull");
         status.textContent = "출력 갱신됨";
       } catch (_) {
         status.textContent = "출력을 읽을 수 없습니다";
       }
     }
 
-    function connectMonitorEvents() {
+    function connectGuardianEvents() {
       if (window.location.protocol === "file:") {
         setEventStatus("브리지 필요");
         return;
@@ -1141,13 +1141,13 @@
         appendConsoleMessage({
           key: "system:event-connected",
           role: "system",
-          body: "실시간 모니터 스트림이 연결되었습니다.",
+          body: "실시간 가디언 스트림이 연결되었습니다.",
           meta: "이후 질문과 답변 변경은 자동으로 콘솔에 표시됩니다."
         });
       });
       eventSource.addEventListener("snapshot", (message) => {
         setEventStatus("실시간 연결됨", "live");
-        renderMonitorSnapshot(JSON.parse(message.data), "event");
+        renderGuardianSnapshot(JSON.parse(message.data), "event");
       });
       eventSource.onerror = () => {
         setEventStatus("재연결 중");
@@ -1173,8 +1173,8 @@
       node.addEventListener("change", syncSettings);
     });
     syncSettings();
-    refreshMonitorOutput();
-    connectMonitorEvents();
+    refreshGuardianOutput();
+    connectGuardianEvents();
   </script>
 </body>
 </html>

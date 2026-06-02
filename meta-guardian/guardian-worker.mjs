@@ -4,20 +4,20 @@ import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { join, relative, resolve } from "node:path";
 
-const root = resolve(process.env.MONITOR_WORKER_ROOT || process.cwd());
-const metaDir = join(root, "meta-monitor");
+const root = resolve(process.env.GUARDIAN_WORKER_ROOT || process.cwd());
+const metaDir = join(root, "meta-guardian");
 const settingsPath = join(metaDir, "settings.json");
 const questionsPath = join(metaDir, "questions.jsonl");
 const mainSessionEventsPath = join(metaDir, "main-session-events.jsonl");
-const monitorPromptPath = join(metaDir, "monitor-prompt.md");
-const monitorInputPath = join(metaDir, "monitor-input.latest.json");
-const advicePath = join(metaDir, "meta-advice.md");
-const statePath = join(metaDir, "monitor-state.json");
+const guardianPromptPath = join(metaDir, "guardian-prompt.md");
+const guardianInputPath = join(metaDir, "guardian-input.latest.json");
+const advicePath = join(metaDir, "guardian-advice.md");
+const statePath = join(metaDir, "guardian-state.json");
 const sessionDataPath = join(metaDir, "session-data.jsonl");
-const briefingBoardPath = join(metaDir, "briefing-board.html");
-const intervalMs = Number(process.env.MONITOR_WORKER_INTERVAL_MS || 2500);
-const processHistory = process.env.MONITOR_WORKER_PROCESS_HISTORY === "1";
-const codexModelOverride = process.env.MONITOR_WORKER_CODEX_MODEL || "";
+const guardianBoardPath = join(metaDir, "guardian-board.html");
+const intervalMs = Number(process.env.GUARDIAN_WORKER_INTERVAL_MS || 2500);
+const processHistory = process.env.GUARDIAN_WORKER_PROCESS_HISTORY === "1";
+const codexModelOverride = process.env.GUARDIAN_WORKER_CODEX_MODEL || "";
 
 const sleep = (ms) => new Promise((resolveSleep) => setTimeout(resolveSleep, ms));
 
@@ -92,7 +92,7 @@ function defaultState() {
     lastQuestionId: "",
     lastObservationSignature: "",
     lastMainSessionEventId: "",
-    lastMonitorMode: "",
+    lastGuardianMode: "",
     lastAnswerAt: "",
     worker: {
       provider: "openai",
@@ -199,7 +199,7 @@ function normalizeManualQuestion(question) {
   return {
     id: String(question.id || ""),
     timestamp: String(question.timestamp || ""),
-    source: String(question.source || "briefing-board"),
+    source: String(question.source || "guardian-board"),
     question: String(question.question || "")
   };
 }
@@ -217,7 +217,7 @@ function mainSessionSettings(settings) {
     provider: settings.design?.provider || settings.provider || "openai",
     model: settings.mainSession?.model || settings.model || "gpt-5-codex",
     sessionId: settings.mainSession?.sessionId || "main-session",
-    description: settings.mainSession?.description || "Visible main AI CLI onboarding session"
+    description: settings.mainSession?.description || "Visible main AI CLI session"
   };
 }
 
@@ -230,7 +230,7 @@ function observationSignature(events) {
   }))));
 }
 
-async function buildMonitorInput(workItem, settings) {
+async function buildGuardianInput(workItem, settings) {
   const generatedAt = new Date().toISOString();
   const [gitStatus, gitDiffStat, branchResult, remoteResult, questions, allMainEvents, advice, artifacts] = await Promise.all([
     runCommand("git", ["status", "--short"]),
@@ -242,12 +242,12 @@ async function buildMonitorInput(workItem, settings) {
     readTextWithMtime(advicePath),
     Promise.all([
       artifactRef(settingsPath),
-      artifactRef(briefingBoardPath),
+      artifactRef(guardianBoardPath),
       artifactRef(advicePath),
       artifactRef(statePath),
       artifactRef(sessionDataPath),
       artifactRef(mainSessionEventsPath),
-      artifactRef(monitorPromptPath)
+      artifactRef(guardianPromptPath)
     ])
   ]);
 
@@ -256,12 +256,12 @@ async function buildMonitorInput(workItem, settings) {
   const manualQuestions = questions.slice(-8).map(normalizeManualQuestion);
   const [
     settingsArtifact,
-    briefingBoardArtifact,
-    metaAdviceArtifact,
-    monitorStateArtifact,
+    guardianBoardArtifact,
+    guardianAdviceArtifact,
+    guardianStateArtifact,
     sessionDataArtifact,
     mainSessionEventsArtifact,
-    monitorPromptArtifact
+    guardianPromptArtifact
   ] = artifacts;
 
   return {
@@ -273,11 +273,11 @@ async function buildMonitorInput(workItem, settings) {
       branch: branchResult.stdout.trim()
     },
     language: normalizeLanguage(settings),
-    monitorMode: workItem.monitorMode,
+    guardianMode: workItem.guardianMode,
     mainSession: mainSessionSettings(settings),
     sourcePolicy: {
       allowedSources: [
-        "meta-monitor/main-session-events.jsonl",
+        "meta-guardian/main-session-events.jsonl",
         "visible main-session transcript/export when available",
         "repo files",
         "git status --short",
@@ -288,7 +288,7 @@ async function buildMonitorInput(workItem, settings) {
         "private chain-of-thought",
         "unstored assumptions"
       ],
-      writeScope: Array.isArray(settings.writeScope) ? settings.writeScope : ["meta-monitor/**"]
+      writeScope: Array.isArray(settings.writeScope) ? settings.writeScope : ["meta-guardian/**"]
     },
     mainSessionEvents,
     manualQuestions,
@@ -298,17 +298,17 @@ async function buildMonitorInput(workItem, settings) {
     },
     artifacts: {
       settings: settingsArtifact,
-      briefingBoard: briefingBoardArtifact,
-      metaAdvice: metaAdviceArtifact,
-      monitorState: monitorStateArtifact,
+      guardianBoard: guardianBoardArtifact,
+      guardianAdvice: guardianAdviceArtifact,
+      guardianState: guardianStateArtifact,
       sessionData: sessionDataArtifact,
       mainSessionEvents: mainSessionEventsArtifact,
-      monitorInput: {
-        path: relativePath(monitorInputPath),
+      guardianInput: {
+        path: relativePath(guardianInputPath),
         exists: true,
         updatedAt: generatedAt
       },
-      monitorPrompt: monitorPromptArtifact
+      guardianPrompt: guardianPromptArtifact
     },
     previousAdvice: {
       exists: advice.exists,
@@ -319,9 +319,9 @@ async function buildMonitorInput(workItem, settings) {
 }
 
 function defaultPromptTemplate() {
-  return `You are the meta monitor for this repo.
+  return `You are the meta guardian for this repo.
 
-Use the monitor input JSON below. Prefer main-session events over manual questions. Do not use hidden model reasoning.
+Use the guardian input JSON below. Prefer main-session events over manual questions. Do not use hidden model reasoning.
 
 Return concise Korean advice with these sections:
 - What Happened
@@ -331,17 +331,17 @@ Return concise Korean advice with these sections:
 - Evidence
 
 \`\`\`json
-{{MONITOR_INPUT_JSON}}
+{{GUARDIAN_INPUT_JSON}}
 \`\`\`
 `;
 }
 
 function renderPrompt(template, packet) {
   const inputJson = JSON.stringify(packet, null, 2);
-  if (template.includes("{{MONITOR_INPUT_JSON}}")) {
-    return template.replace("{{MONITOR_INPUT_JSON}}", inputJson);
+  if (template.includes("{{GUARDIAN_INPUT_JSON}}")) {
+    return template.replace("{{GUARDIAN_INPUT_JSON}}", inputJson);
   }
-  return `${template.trim()}\n\nMonitor input JSON:\n\`\`\`json\n${inputJson}\n\`\`\`\n`;
+  return `${template.trim()}\n\nGuardian input JSON:\n\`\`\`json\n${inputJson}\n\`\`\`\n`;
 }
 
 async function runCodexAnswer(prompt) {
@@ -390,19 +390,19 @@ function formatAdvice(workItem, packet, answer, settings) {
   const sourceEventIds = packet.mainSessionEvents.map((event) => event.eventId).join(", ") || "none";
   const manualQuestion = workItem.question ? `${workItem.question.id} / ${workItem.question.question}` : "none";
 
-  return `# Meta Monitor Advice
+  return `# Meta Guardian Advice
 
-- Mode: ${workItem.monitorMode}
+- Mode: ${workItem.guardianMode}
 - Source event IDs: ${sourceEventIds}
 - Manual question: ${manualQuestion}
-- Input file: meta-monitor/monitor-input.latest.json
+- Input file: meta-guardian/guardian-input.latest.json
 - Answered at: ${answeredAt}
 - Provider: ${settings.provider || "openai"}
 - Configured model: ${settings.model || "gpt-5-codex"}
 - Runtime model: ${codexModelOverride || "codex-cli-default"}
-- Write scope: meta-monitor/** only
+- Write scope: meta-guardian/** only
 
-## Monitor Output
+## Guardian Output
 
 ${answer || "답변을 생성하지 못했습니다."}
 `;
@@ -431,7 +431,7 @@ async function markWorkItemFailed(workItem, state) {
     state.failedQuestionIds = unique([...state.failedQuestionIds, workItem.question.id]);
     state.lastQuestionId = workItem.question.id;
   }
-  state.lastMonitorMode = workItem.monitorMode;
+  state.lastGuardianMode = workItem.guardianMode;
   await writeJson(statePath, state);
 }
 
@@ -446,7 +446,7 @@ async function markWorkItemProcessed(workItem, state, settings, answeredAt) {
     state.failedQuestionIds = state.failedQuestionIds.filter((id) => id !== workItem.question.id);
     state.lastQuestionId = workItem.question.id;
   }
-  state.lastMonitorMode = workItem.monitorMode;
+  state.lastGuardianMode = workItem.guardianMode;
   state.lastAnswerAt = answeredAt;
   state.worker = {
     provider: settings.provider || "openai",
@@ -458,11 +458,11 @@ async function markWorkItemProcessed(workItem, state, settings, answeredAt) {
 }
 
 async function processWorkItem(workItem, state, settings) {
-  console.log(`[monitor-worker] processing ${workItemLabel(workItem)}`);
-  const packet = await buildMonitorInput(workItem, settings);
-  await writeJson(monitorInputPath, packet);
+  console.log(`[guardian-worker] processing ${workItemLabel(workItem)}`);
+  const packet = await buildGuardianInput(workItem, settings);
+  await writeJson(guardianInputPath, packet);
 
-  const promptTemplate = await readText(monitorPromptPath, defaultPromptTemplate());
+  const promptTemplate = await readText(guardianPromptPath, defaultPromptTemplate());
   const result = await runCodexAnswer(renderPrompt(promptTemplate, packet));
 
   if (result.code !== 0 || !result.finalText) {
@@ -473,28 +473,28 @@ async function processWorkItem(workItem, state, settings) {
       formatAdvice(
         workItem,
         packet,
-        `모니터 답변 생성에 실패했습니다.\n\n\`\`\`text\n${result.stderr || result.stdout || "unknown error"}\n\`\`\``,
+        `가디언 답변 생성에 실패했습니다.\n\n\`\`\`text\n${result.stderr || result.stdout || "unknown error"}\n\`\`\``,
         settings
       ),
       "utf8"
     );
     await appendSessionEvent({
       timestamp: failedAt,
-      sessionRole: "monitor",
+      sessionRole: "guardian",
       eventType: "answer_failed",
       contextUsageRatio: 0,
-      sourcesRead: ["meta-monitor/main-session-events.jsonl", "meta-monitor/questions.jsonl", "meta-monitor/settings.json", "meta-monitor/monitor-prompt.md", "git status --short", "git diff --stat"],
-      artifactsWritten: ["meta-monitor/meta-advice.md", "meta-monitor/monitor-input.latest.json", "meta-monitor/monitor-state.json", "meta-monitor/session-data.jsonl"],
+      sourcesRead: ["meta-guardian/main-session-events.jsonl", "meta-guardian/questions.jsonl", "meta-guardian/settings.json", "meta-guardian/guardian-prompt.md", "git status --short", "git diff --stat"],
+      artifactsWritten: ["meta-guardian/guardian-advice.md", "meta-guardian/guardian-input.latest.json", "meta-guardian/guardian-state.json", "meta-guardian/session-data.jsonl"],
       questionRef: workItemRef(workItem),
-      answerRef: "meta-monitor/meta-advice.md",
-      valueSignals: ["monitor worker attempted to process schema-shaped input"],
-      featureCandidates: ["monitor worker retry policy", "main-session event capture"]
+      answerRef: "meta-guardian/guardian-advice.md",
+      valueSignals: ["guardian worker attempted to process schema-shaped input"],
+      featureCandidates: ["guardian worker retry policy", "main-session event capture"]
     });
     return;
   }
 
   const answer = formatAdvice(workItem, packet, result.finalText, settings);
-  const tmpAdvicePath = join(metaDir, ".meta-advice.tmp");
+  const tmpAdvicePath = join(metaDir, ".guardian-advice.tmp");
   await writeFile(tmpAdvicePath, answer, "utf8");
   await rename(tmpAdvicePath, advicePath);
 
@@ -502,17 +502,17 @@ async function processWorkItem(workItem, state, settings) {
   await markWorkItemProcessed(workItem, state, settings, answeredAt);
   await appendSessionEvent({
     timestamp: answeredAt,
-    sessionRole: "monitor",
+    sessionRole: "guardian",
     eventType: workItem.kind === "main-session-observation" ? "observe" : "answer",
     contextUsageRatio: 0,
-    sourcesRead: ["meta-monitor/main-session-events.jsonl", "meta-monitor/questions.jsonl", "meta-monitor/settings.json", "meta-monitor/monitor-prompt.md", "git status --short", "git diff --stat"],
-    artifactsWritten: ["meta-monitor/meta-advice.md", "meta-monitor/monitor-input.latest.json", "meta-monitor/monitor-state.json", "meta-monitor/session-data.jsonl"],
+    sourcesRead: ["meta-guardian/main-session-events.jsonl", "meta-guardian/questions.jsonl", "meta-guardian/settings.json", "meta-guardian/guardian-prompt.md", "git status --short", "git diff --stat"],
+    artifactsWritten: ["meta-guardian/guardian-advice.md", "meta-guardian/guardian-input.latest.json", "meta-guardian/guardian-state.json", "meta-guardian/session-data.jsonl"],
     questionRef: workItemRef(workItem),
-    answerRef: "meta-monitor/meta-advice.md",
-    valueSignals: [workItem.kind === "main-session-observation" ? "main session event flow explained by read-only monitor worker" : "manual question answered by read-only monitor worker"],
-    featureCandidates: ["schema-shaped monitor input", "main-session event observer"]
+    answerRef: "meta-guardian/guardian-advice.md",
+    valueSignals: [workItem.kind === "main-session-observation" ? "main session event flow explained by read-only guardian worker" : "manual question answered by read-only guardian worker"],
+    featureCandidates: ["schema-shaped guardian input", "main-session event observer"]
   });
-  console.log(`[monitor-worker] wrote meta-monitor/meta-advice.md for ${workItemLabel(workItem)}`);
+  console.log(`[guardian-worker] wrote meta-guardian/guardian-advice.md for ${workItemLabel(workItem)}`);
 }
 
 async function nextQuestion(state) {
@@ -525,7 +525,7 @@ async function nextQuestion(state) {
     const historical = questions.slice(0, -1).map((question) => question.id);
     state.skippedQuestionIds = unique([...state.skippedQuestionIds, ...historical]);
     await writeJson(statePath, state);
-    console.log(`[monitor-worker] skipped ${historical.length} historical question(s); set MONITOR_WORKER_PROCESS_HISTORY=1 to process all`);
+    console.log(`[guardian-worker] skipped ${historical.length} historical question(s); set GUARDIAN_WORKER_PROCESS_HISTORY=1 to process all`);
   }
 
   const handled = new Set([
@@ -540,7 +540,7 @@ async function nextQuestion(state) {
   return {
     kind: "manual-question",
     id: `question:${question.id}`,
-    monitorMode: "answer-manual-question",
+    guardianMode: "answer-manual-question",
     question: normalizeManualQuestion(question),
     mainSessionEvents: []
   };
@@ -561,7 +561,7 @@ async function nextWorkItem(state) {
       return {
         kind: "main-session-observation",
         id: `main-session:${signature}`,
-        monitorMode: "observe-main-session",
+        guardianMode: "observe-main-session",
         observationSignature: signature,
         sourceEventIds: recentEvents.map((event) => event.eventId),
         mainSessionEvents: recentEvents
@@ -575,9 +575,9 @@ async function nextWorkItem(state) {
 async function main() {
   await mkdir(metaDir, { recursive: true });
   let state = normalizeState(await readJson(statePath, defaultState()).catch(() => defaultState()));
-  console.log(`[monitor-worker] watching ${mainSessionEventsPath}`);
-  console.log(`[monitor-worker] secondary question queue ${questionsPath}`);
-  console.log(`[monitor-worker] writing latest advice to ${advicePath}`);
+  console.log(`[guardian-worker] watching ${mainSessionEventsPath}`);
+  console.log(`[guardian-worker] secondary question queue ${questionsPath}`);
+  console.log(`[guardian-worker] writing latest advice to ${advicePath}`);
 
   while (true) {
     const settings = await readJson(settingsPath, {
@@ -595,18 +595,18 @@ async function main() {
 }
 
 main().catch(async (error) => {
-  console.error("[monitor-worker] fatal", error);
+  console.error("[guardian-worker] fatal", error);
   await appendSessionEvent({
     timestamp: new Date().toISOString(),
-    sessionRole: "monitor",
+    sessionRole: "guardian",
     eventType: "worker_fatal",
     contextUsageRatio: 0,
-    sourcesRead: ["meta-monitor/main-session-events.jsonl", "meta-monitor/questions.jsonl", "meta-monitor/settings.json"],
-    artifactsWritten: ["meta-monitor/session-data.jsonl"],
+    sourcesRead: ["meta-guardian/main-session-events.jsonl", "meta-guardian/questions.jsonl", "meta-guardian/settings.json"],
+    artifactsWritten: ["meta-guardian/session-data.jsonl"],
     questionRef: "",
     answerRef: "",
     valueSignals: [],
-    featureCandidates: ["monitor worker error recovery"],
+    featureCandidates: ["guardian worker error recovery"],
     error: String(error?.stack || error)
   });
   process.exit(1);
